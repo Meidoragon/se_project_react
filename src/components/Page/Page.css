@@ -1,0 +1,9 @@
+@font-face{
+  src: url('../../vendor/fonts/CabinetGrotesk-Medium.woff') format('woff');
+  font-family: 'Cabinet Grotesk';
+}
+
+.page{
+  margin: 0;
+  padding: 32px 40px 24px;
+}
