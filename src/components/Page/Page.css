@@ -6,4 +6,7 @@
 .page{
   margin: 0;
   padding: 32px 40px 24px;
+  font-family: 'Cabinet Grotesk';
+  font-size: 20px;
+  font-weight: 700;
 }

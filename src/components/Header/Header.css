@@ -1,14 +1,49 @@
 .header{
     margin: 0;
     background-color:orchid;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 60px;
+}
+
+.header__container{
+    display: flex;
+    align-items: center;
 }
 
 .header__logo{
     height: 40px;
     width: 89px;
+    margin: 0 24px 0 0;
+}
+
+.header__date{
+    margin: 11px 0 5px;
+}
+
+.header__button{
+    padding: 0;
+    margin: 8px 0;
+    border: none;
+    background-color: #fff0;
+    color: #000;
+    white-space: nowrap;
+    font-weight: 700;
+}
+
+/* .add-clothes-button{
+    /* font-family: 'Cabinet Grotest';
+    font-size: 20px;
+    font-weight: 700;
+} */
+
+.header__username{
+    margin: 8px 0 7px 20px;
 }
 
 .header__avatar{
+    margin-left: 12px;
     background-image: url(../../images/avatar.png);
     border-radius: 50%;
     background-position: center;
@@ -16,4 +51,8 @@
     background-size: cover;
     width: 40px;
     height: 40px;
+}
+
+.header__button:hover{
+    cursor: pointer;
 }
