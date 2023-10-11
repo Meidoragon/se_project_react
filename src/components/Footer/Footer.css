@@ -1,0 +1,17 @@
+.footer{
+    display: flex;
+    justify-content: space-between;
+    background-color:palegreen;
+    margin: 0;
+    padding: 85px 0 0;
+}
+
+.footer__name{
+    font-size: 16px;
+    margin: 0;
+}
+
+.footer__year{
+    font-size: 16px;
+    margin: 0;
+}
