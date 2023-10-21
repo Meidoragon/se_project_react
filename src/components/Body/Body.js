@@ -3,21 +3,19 @@ import ItemCard from '../ItemCard/ItemCard.js';
 import './Body.css';
 
 export default function Body(props){
-
-    return (
-      <div className='body'>
-        {weatherCard('day', 'sunny')}
-          <p className='body__forecast'>Today is HECKINGHOT° F / You may want to wear:</p>
-        {createClothingCards(props.items)}
-      </div>
-    )
+  return (
+    <div className='body'>
+      {weatherCard(props.time, props.weather, props.temperature)}
+        <p className='body__forecast'>Today is {props.temperature}° F / You may want to wear:</p>
+      {createClothingCards(props.items)}
+    </div>
+  )
 }
 
-
-function weatherCard(time, weather){
+function weatherCard(time, weather, temperature){
     return (
         <div className='body__weather-card'>
-            <p className='body__weather-card-temperature'>HECKINGHOT° F</p>
+            <p className='body__weather-card-temperature'>{temperature}° F</p>
         </div>
     )
 }
