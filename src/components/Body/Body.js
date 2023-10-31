@@ -13,8 +13,9 @@ export default function Body(props){
 }
 
 function weatherCard(time, weather, temperature){
+  console.log(`${time}_${weather}`)
     return (
-        <div className='body__weather-card'>
+        <div className={`body__weather-card ${time}_${weather}`} >
             <p className='body__weather-card-temperature'>{temperature}° F</p>
         </div>
     )
