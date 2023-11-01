@@ -7,6 +7,7 @@ import Body from '../Body/Body.js';
 import Footer from '../Footer/Footer.js';
 import { defaultClothingItems } from '../../utils/constants';
 import ModalWithForm from '../ModalWithForm/ModalWithForm';
+import ItemModal from '../ItemModal/ItemModal.js';
 
 export default function App() {
   const userName = "(V);,,;(V)";
@@ -15,6 +16,7 @@ export default function App() {
   const time = "day";
   const weather = "cloudy";
   const [activeModal, setActiveModal] = React.useState('');
+  const [selectedCard, setSelectedCard] = React.useState({});
 
   function openGarmentForm() {
     setActiveModal('create');
@@ -32,10 +34,23 @@ export default function App() {
     setActiveModal('');
   }
 
+  function openCardPopup(item){
+    setSelectedCard(item)
+    setActiveModal('preview');
+  }
+  function closeCardPopup(){
+    setActiveModal('');
+    setSelectedCard({});
+  }
+
   return (
     <div className='page'>
       <Header locationName={location} userName={userName} openGarmentForm={openGarmentForm}/>
-      <Body items={defaultClothingItems} temperature={temperature} time={time} weather={weather}/>
+      <Body items={defaultClothingItems}
+        temperature={temperature}
+        time={time}
+        weather={weather}
+        onCardSelection={openCardPopup}/>
       <Footer />
       {activeModal === 'create' && (
       <ModalWithForm title='New garment' name="testName" onClose={closeGarmentForm} onSubmit={submitGarmentForm}>
@@ -61,6 +76,9 @@ export default function App() {
           </div>
         </div>
       </ModalWithForm>)}
+      {activeModal === 'preview' && 
+        <ItemModal item={selectedCard} onClose={closeCardPopup} />
+      }
     </div>
   );
 }
