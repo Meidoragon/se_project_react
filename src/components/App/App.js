@@ -53,28 +53,38 @@ export default function App() {
         onCardSelection={openCardPopup}/>
       <Footer />
       {activeModal === 'create' && (
-      <ModalWithForm title='New garment' name="testName" onClose={closeGarmentForm} onSubmit={submitGarmentForm}>
-        <label>
-          Name<input type='text' name='name' minLength='1' maxLength='30' />
+      <ModalWithForm title='New garment' name="testName" buttonText='Add garment' onClose={closeGarmentForm} onSubmit={submitGarmentForm}>
+        <label >
+          <p className='modal__input-label'>Name</p>
+          <input className='modal__input' type='text' name='name' minLength='1' maxLength='30' placeholder='Name'/>
         </label>
         <label>
-          Image<input type='url' name='link' minLength='1' />
+          <p className='modal__input-label'>Image</p>
+          <input className="modal__input" type='url' id='formInputLink' name='link' minLength='1' placeholder='Image URL'/>
         </label>
-        <p>Select weather type</p>
-        <div>
-          <div>
-            <input type='radio' id='hot' value='hot' />
-            <label>Hot</label>
+        <fieldset className="modal__radio-buttons">
+          <legend className='modal__radio-title'>Select the weather type:</legend>
+          <div className="modal__radio-button-group">
+            <input 
+              className='modal__radio-button' 
+              type='radio' 
+              id='hot' 
+              value='hot' 
+              name='weather' defaultChecked/>
+            <label 
+              className='modal__radio-button-label' 
+              for='hot'
+            >Hot</label>
           </div>
-          <div>
-            <input type='radio' id='warm' value='warm' />
-            <label>Warm</label>
+          <div className="modal__radio-button-group">
+            <input className='modal__radio-button' type='radio' id='warm' value='warm' name='weather'/>
+            <label className='modal__radio-button-label' for='warm'>Warm</label>
           </div>
-          <div>
-            <input type='radio' id='cold' value='cold' />
-            <label>Cold</label>
+          <div className="modal__radio-button-group">
+            <input className='modal__radio-button' type='radio' id='cold' value='cold' name='weather'/>
+            <label className='modal__radio-button-label' for='cold'>Cold</label>
           </div>
-        </div>
+        </fieldset>
       </ModalWithForm>)}
       {activeModal === 'preview' && 
         <ItemModal item={selectedCard} onClose={closeCardPopup} />
