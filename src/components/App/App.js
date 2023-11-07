@@ -70,19 +70,36 @@ export default function App() {
               type='radio' 
               id='hot' 
               value='hot' 
-              name='weather' defaultChecked/>
+              name='weather' 
+              defaultChecked/>
             <label 
               className='modal__radio-button-label' 
               for='hot'
             >Hot</label>
           </div>
           <div className="modal__radio-button-group">
-            <input className='modal__radio-button' type='radio' id='warm' value='warm' name='weather'/>
-            <label className='modal__radio-button-label' for='warm'>Warm</label>
+            <input 
+              className='modal__radio-button' 
+              type='radio' 
+              id='warm' 
+              value='warm' 
+              name='weather'/>
+            <label 
+              className='modal__radio-button-label' 
+              for='warm'
+            >Warm</label>
           </div>
           <div className="modal__radio-button-group">
-            <input className='modal__radio-button' type='radio' id='cold' value='cold' name='weather'/>
-            <label className='modal__radio-button-label' for='cold'>Cold</label>
+            <input 
+              className='modal__radio-button' 
+              type='radio' 
+              id='cold' 
+              value='cold' 
+              name='weather'/>
+            <label 
+              className='modal__radio-button-label' 
+              for='cold'
+            >Cold</label>
           </div>
         </fieldset>
       </ModalWithForm>)}
