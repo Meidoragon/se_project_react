@@ -1,4 +1,4 @@
-.modal{
+.form-modal{
   background-color: #0008; /*black that is roughly 50% transparent */
   position: fixed;
   display: flex;
@@ -11,13 +11,13 @@
   transition: visibility 0ms linear 500ms, opacity 500ms linear;
 }
 
-.modal_opened{
+.form-modal_opened{
   visibility: visible;
   opacity: 1;
   transition-delay: 0ms;
 }
 
-.modal__content{
+.form-modal__content{
   position: relative;
   box-sizing: border-box;
   margin: auto;
@@ -27,11 +27,11 @@
   border-radius: 20px;
   background-color: #FFF;
 }
-.modal__title{
+.form-modal__title{
   margin: 0 0 24px;
   font-size: 16px;
 }
-.modal__close-button{
+.form-modal__close-button{
   padding: 0;
   margin: 0;
   position: absolute;
@@ -48,16 +48,16 @@
   border: none;
 }
 
-.modal__close-button:hover{
+.form-modal__close-button:hover{
   cursor: pointer;
 }
 
-.modal__input-label{
+.form-modal__input-label{
   margin: 0 0 8px;
   font-size: 16px;
 }
 
-.modal__input{
+.form-modal__input{
   width: 100%;
   margin: 0 0 24px;
   padding: 0 0 4px;
@@ -66,33 +66,33 @@
   font-size: 16px;
 }
 
-.modal__radio-title{
+.form-modal__radio-title{
   margin: 0 0 24px;
   font-size: 16px;
 }
 
-.modal__radio-buttons{
+.form-modal__radio-buttons{
   margin: 0;
   padding: 0;
   border: none;
 }
 
-.modal__radio-button-group{
+.form-modal__radio-button-group{
   display: flex;
   margin: 0 0 8px;
   gap: 8px;
 }
 
-.modal__radio-button-label{
+.form-modal__radio-button-label{
   color: #00000080; /*50% opactiy*/
   font-size: 16px;
 }
 
-.modal__radio-button:checked+.modal__radio-button-label{
+.form-modal__radio-button:checked+.modal__radio-button-label{
   color: #000000ff; /*100% opacity*/
 }
 
-.modal__submit-button{
+.form-modal__submit-button{
   margin: 24px 0 0;
   border: none;
   border-radius: 4px;
