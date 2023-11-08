@@ -26,3 +26,5 @@ yarn-error.log*
 nREADME.md
 jsconfig.json
 *api_keys.js
+*closeIcon_image.svg
+*test_*
