@@ -1,36 +1,34 @@
-import React from 'react';
-// import { useState } from 'react';
+// import React from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import '../../vendor/normalize.css';
 import Header from '../Header/Header.js';
 import Body from '../Body/Body.js';
 import Footer from '../Footer/Footer.js';
-import { defaultClothingItems } from '../../utils/constants';
+import { defaultClothingItems, defaultAPIInfo } from '../../utils/constants';
 import ModalWithForm from '../ModalWithForm/ModalWithForm';
 import ItemModal from '../ItemModal/ItemModal.js';
+import { callWeatherAPI, parseResponse } from '../../utils/WeatherAPI.js';
 
 export default function App() {
-  const userName = "(V);,,;(V)";
-  const location = "Bedlam";
-  const temperature = "HECKINGHOT";
+  const userName = `The "Zero Degree Longitude Club" President`;
+  const location = "Greenwich, UK";
   const time = "day";
-  const weather = "cloudy";
-  const [activeModal, setActiveModal] = React.useState('');
-  const [selectedCard, setSelectedCard] = React.useState({});
-
+  // const weather = "cloudy";
+  const [activeModal, setActiveModal] = useState('');
+  const [selectedCard, setSelectedCard] = useState({});
+  const [temperature, setTemperature] = useState(0);
+  const [weather, setWeather] = useState('clear');
   function openGarmentForm() {
     setActiveModal('create');
-    console.log("garment form open!")
   }
 
   function closeGarmentForm() {
     setActiveModal('');
-    console.log("modal close!");
   }
 
   function submitGarmentForm(evt) {
     evt.preventDefault();
-    console.log('garment form submit!')
     setActiveModal('');
   }
 
@@ -43,10 +41,21 @@ export default function App() {
     setSelectedCard({});
   }
 
+  useEffect(() => {
+    /*const weatherInfo =*/ callWeatherAPI(defaultAPIInfo).then((item) => {
+      return parseResponse(item);
+    }).then((data) => {
+      console.log(data);
+      setTemperature(data.temperature);
+      console.log(data.weatherCode);
+      setWeather(parseWeatherCode(data.weatherCode));
+    })
+  });
+
   return (
     <div className='page'>
       <Header locationName={location} userName={userName} openGarmentForm={openGarmentForm}/>
-      <Body items={defaultClothingItems}
+      <Body clothingItems={defaultClothingItems}
         temperature={temperature}
         time={time}
         weather={weather}
@@ -109,3 +118,42 @@ export default function App() {
     </div>
   );
 }
+
+
+
+function parseWeatherCode(code){
+  const splitStringifiedCode = String(code).split(''); 
+  if (splitStringifiedCode.length !== 3) {
+    console.log(splitStringifiedCode.length)
+    console.info (`Unexpected weather code: ${code}`)
+    return 'clear';
+  }
+  switch (splitStringifiedCode[0]) {
+    default:
+      console.info(`Unexpected weather code: ${code}`);
+      return 'clear';
+    case '2':
+      return 'stormy';
+    case '3':
+    case '5':
+      return 'rainy';
+    case '6':
+      return 'snowy';
+    case '7':
+      return 'foggy';
+    case '8':
+      switch (splitStringifiedCode[2]) {
+        default:
+          console.info(`Unexpected weather code: ${code}`)
+          return 'clear';
+        case '0':
+        case '1':
+        case '2':
+          return 'clear';
+        case '3':
+        case '4':
+          return 'cloudy';
+      }
+  }
+}
+

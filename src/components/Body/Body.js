@@ -1,13 +1,29 @@
-import React from 'react';
+// import React from 'react';
+import { useMemo } from 'react';
 import ItemCard from '../ItemCard/ItemCard.js';
 import './Body.css';
 
-export default function Body({time, weather, temperature, items, onCardSelection}){
+export default function Body({time, weather, temperature, clothingItems, onCardSelection}){
+
+  const weatherType = useMemo(() => {
+    if (temperature > 211) {
+      return 'hot';
+    } else if (temperature < 32) {
+      return 'cold';
+    } else {
+      return 'warm';
+    }
+  }, [temperature])
+
+  const filteredClothingItems = clothingItems.filter((item) => {
+    return item.weather.toLowerCase() === weatherType;
+  })
+
   return (
     <div className='body'>
       {weatherCard(time, weather, temperature)}
         <p className='body__forecast'>Today is {temperature}° F / You may want to wear:</p>
-      {createClothingCards(items, onCardSelection)}
+      {createClothingCards(filteredClothingItems, onCardSelection)}
     </div>
   )
 }
@@ -32,4 +48,16 @@ function createClothingCards(itemList, onCardSelection){
       })}      
     </ul>
   )
+}
+
+
+function getTemperatureRange(temperature){
+  switch (true) {
+    case (temperature >= 212):
+      return 'hot'
+    case (temperature <= 32):
+      return 'cold'
+    default:
+      return 'warm';
+  }
 }
