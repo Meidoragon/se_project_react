@@ -5,155 +5,117 @@ import '../../vendor/normalize.css';
 import Header from '../Header/Header.js';
 import Body from '../Body/Body.js';
 import Footer from '../Footer/Footer.js';
-import { defaultClothingItems, defaultAPIInfo } from '../../utils/constants';
+import { defaultClothingItems, defaultAPIInfo, radioOptions } from '../../utils/constants';
 import ModalWithForm from '../ModalWithForm/ModalWithForm';
 import ItemModal from '../ItemModal/ItemModal.js';
-import { callWeatherAPI, parseResponse } from '../../utils/WeatherAPI.js';
+import { callWeatherAPI, parseResponse, parseWeatherCode } from '../../utils/WeatherAPI.js';
 
 export default function App() {
-  const userName = `The "Zero Degree Longitude Club" President`;
-  const location = "Greenwich, UK";
-  const time = "day";
-  // const weather = "cloudy";
+  const [userName, setUsername] = useState(`The "Zero Degree Longitude Club" President`);
+  const [isDay, setIsDay] = useState('true'); 
   const [activeModal, setActiveModal] = useState('');
   const [selectedCard, setSelectedCard] = useState({});
   const [temperature, setTemperature] = useState(0);
   const [weather, setWeather] = useState('clear');
+  const [location, setLocation] = useState('');
+  
   function openGarmentForm() {
     setActiveModal('create');
   }
 
-  function closeGarmentForm() {
-    setActiveModal('');
+  function handleGarmentFormCloseClick(evt) {
+    if (evt.target !== evt.currentTarget) {
+      return;
+    }
+    closePopup()
   }
 
   function submitGarmentForm(evt) {
     evt.preventDefault();
-    setActiveModal('');
+    // setActiveModal('');
   }
 
   function openCardPopup(item){
     setSelectedCard(item)
     setActiveModal('preview');
   }
-  function closeCardPopup(){
+
+  function closePopup (evt) {
     setActiveModal('');
-    setSelectedCard({});
+    setSelectedCard({}); 
+  }
+
+  function handleCardCloseClick(evt) {
+    if(evt.target !== evt.currentTarget) {
+      return;
+    }
+    closePopup();
   }
 
   useEffect(() => {
     /*const weatherInfo =*/ callWeatherAPI(defaultAPIInfo).then((item) => {
       return parseResponse(item);
     }).then((data) => {
-      console.log(data);
       setTemperature(data.temperature);
-      console.log(data.weatherCode);
       setWeather(parseWeatherCode(data.weatherCode));
+      setLocation(data.location)
+      setIsDay(data.dateTime >= data.sunrise && data.dateTime <= data.sunset ? true : false)
     })
   });
+
+  useEffect(() => {
+    if (!activeModal) return;
+    function handleEscClose(evt) {
+      if (evt.key === "Escape") {
+        closePopup()
+      }
+    };
+    document.addEventListener("keydown", handleEscClose);
+    return () => {
+      document.removeEventListener("keydown", handleEscClose);
+    };
+  }, [activeModal])
 
   return (
     <div className='page'>
       <Header locationName={location} userName={userName} openGarmentForm={openGarmentForm}/>
       <Body clothingItems={defaultClothingItems}
         temperature={temperature}
-        time={time}
+        time={isDay ? 'day' : 'night'}
         weather={weather}
         onCardSelection={openCardPopup}/>
       <Footer />
       {activeModal === 'create' && (
-      <ModalWithForm title='New garment' name="new-garment" buttonText='Add garment' onClose={closeGarmentForm} onSubmit={submitGarmentForm}>
-        <label >
-          <p className='form-modal__input-label'>Name</p>
+      <ModalWithForm title='New garment' name="new-garment" buttonText='Add garment' onClick={handleGarmentFormCloseClick} onSubmit={submitGarmentForm}>
+        <label className='form-modal__input-label'>
+          Name
           <input className='form-modal__input' type='text' name='name' minLength='1' maxLength='30' placeholder='Name'/>
         </label>
-        <label>
-          <p className='form-modal__input-label'>Image</p>
+        <label className='form-modal__input-label'>
+          Image
           <input className="form-modal__input" type='url' id='formInputLink' name='link' minLength='1' placeholder='Image URL'/>
         </label>
         <fieldset className="form-modal__radio-buttons">
           <legend className='form-modal__radio-title'>Select the weather type:</legend>
-          <div className="form-modal__radio-button-group">
-            <input 
-              className='form-modal__radio-button' 
-              type='radio' 
-              id='hot' 
-              value='hot' 
-              name='weather' 
-              defaultChecked/>
-            <label 
-              className='form-modal__radio-button-label' 
-              for='hot'
-            >Hot</label>
-          </div>
-          <div className="form-modal__radio-button-group">
-            <input 
-              className='form-modal__radio-button' 
-              type='radio' 
-              id='warm' 
-              value='warm' 
-              name='weather'/>
-            <label 
-              className='form-modal__radio-button-label' 
-              for='warm'
-            >Warm</label>
-          </div>
-          <div className="form-modal__radio-button-group">
-            <input 
-              className='form-modal__radio-button' 
-              type='radio' 
-              id='cold' 
-              value='cold' 
-              name='weather'/>
-            <label 
-              className='form-modal__radio-button-label' 
-              for='cold'
-            >Cold</label>
-          </div>
+          {radioOptions.map((choice, index) => {
+          return (
+            <div key={index}>
+              <input 
+                className='form-modal__radio-button' 
+                type='radio' 
+                id={choice.value} 
+                value={choice.value} 
+                name='weather'
+              />
+              <label  className='form-modal__radio-button-label' for={choice.value}>{choice.text}</label>
+            </div>
+          )
+          })}
         </fieldset>
       </ModalWithForm>)}
       {activeModal === 'preview' && 
-        <ItemModal item={selectedCard} onClose={closeCardPopup} />
+        <ItemModal item={selectedCard} onClick={handleCardCloseClick} />
       }
     </div>
   );
 }
-
-
-
-function parseWeatherCode(code){
-  const splitStringifiedCode = String(code).split(''); 
-  if (splitStringifiedCode.length !== 3) {
-    console.log(splitStringifiedCode.length)
-    console.info (`Unexpected weather code: ${code}`)
-    return 'clear';
-  }
-  switch (splitStringifiedCode[0]) {
-    default:
-      console.info(`Unexpected weather code: ${code}`);
-      return 'clear';
-    case '2':
-      return 'stormy';
-    case '3':
-    case '5':
-      return 'rainy';
-    case '6':
-      return 'snowy';
-    case '7':
-      return 'foggy';
-    case '8':
-      switch (splitStringifiedCode[2]) {
-        default:
-          console.info(`Unexpected weather code: ${code}`)
-          return 'clear';
-        case '0':
-        case '1':
-        case '2':
-          return 'clear';
-        case '3':
-        case '4':
-          return 'cloudy';
-      }
-  }
-}
-

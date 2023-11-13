@@ -18,12 +18,15 @@ export function callWeatherAPI({latitude = 51.48, longitude = 0, unitsType = 'im
   return weatherAPI
 }
 
-export function parseResponse(info){
+export function parseResponse(item){
   // console.log(info);
   const parsedData = {}
-  parsedData.temperature = Math.round(info.main.temp);
-  parsedData.weatherCode = parseWeatherArray(info.weather);
-  // console.log(parsedData);
+  parsedData.temperature = Math.round(item.main.temp);
+  parsedData.location = item.name
+  parsedData.weatherCode = parseWeatherArray(item.weather);
+  parsedData.sunrise = item.sys.sunrise;
+  parsedData.sunset = item.sys.sunset;
+  parsedData.dateTime = item.dt;
   return parsedData
 }
 
@@ -36,4 +39,40 @@ function parseWeatherArray(weathers){
   //first entry of weather array is 'primary'
   //consider looking into reading into the additional ids.
   return weathers[0].id
+}
+
+export function parseWeatherCode(code){
+  const splitStringifiedCode = String(code).split(''); 
+  if (splitStringifiedCode.length !== 3) {
+    //console.log(splitStringifiedCode.length)
+    //console.info (`Unexpected weather code: ${code}`)
+    return 'clear';
+  }
+  switch (splitStringifiedCode[0]) {
+    default:
+      console.info(`Unexpected weather code: ${code}`);
+      return 'clear';
+    case '2':
+      return 'stormy';
+    case '3':
+    case '5':
+      return 'rainy';
+    case '6':
+      return 'snowy';
+    case '7':
+      return 'foggy';
+    case '8':
+      switch (splitStringifiedCode[2]) {
+        default:
+          console.info(`Unexpected weather code: ${code}`)
+          return 'clear';
+        case '0':
+        case '1':
+        case '2':
+          return 'clear';
+        case '3':
+        case '4':
+          return 'cloudy';
+      }
+  }
 }

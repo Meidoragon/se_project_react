@@ -67,29 +67,40 @@
 }
 
 .form-modal__radio-title{
-  margin: 0 0 24px;
+  margin: 0 0 12px;
   font-size: 16px;
 }
 
 .form-modal__radio-buttons{
+  display:flex;
+  flex-direction: column;
+  gap: 8px;
   margin: 0;
   padding: 0;
   border: none;
 }
 
-.form-modal__radio-button-group{
+/* .form-modal__radio-button-group{
   display: flex;
   margin: 0 0 8px;
   gap: 8px;
+  cursor: pointer;
+} */
+
+.form-modal__radio-button{
+  margin-right: 8px;
+  cursor: pointer;
 }
 
 .form-modal__radio-button-label{
-  color: #00000080; /*50% opactiy*/
+  color: #00000080; /* 50% opacity; */
   font-size: 16px;
+  cursor: pointer;
 }
 
-.form-modal__radio-button:checked+.modal__radio-button-label{
+.form-modal__radio-button:checked+.form-modal__radio-button-label{
   color: #000000ff; /*100% opacity*/
+  /* color: red; */
 }
 
 .form-modal__submit-button{
@@ -102,7 +113,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0000004C; /*Black with 30% opacity*/
+  background: #000000FF; /*Black with 100% opacity*/
   color: #fff;
   font-size: 16px;
+}
+
+.form-modal__submit-button:hover:not(.inactive){
+  background: #0000009A;  /*Black with 60% opacity*/
+  cursor: pointer;
+}
+
+.inactive{
+  background: #0000004C; /*Black with 30% opactity*/
 }

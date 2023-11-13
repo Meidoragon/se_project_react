@@ -6,9 +6,9 @@ import './Body.css';
 export default function Body({time, weather, temperature, clothingItems, onCardSelection}){
 
   const weatherType = useMemo(() => {
-    if (temperature > 211) {
+    if (temperature > 85) {
       return 'hot';
-    } else if (temperature < 32) {
+    } else if (temperature < 66) {
       return 'cold';
     } else {
       return 'warm';
@@ -48,16 +48,4 @@ function createClothingCards(itemList, onCardSelection){
       })}      
     </ul>
   )
-}
-
-
-function getTemperatureRange(temperature){
-  switch (true) {
-    case (temperature >= 212):
-      return 'hot'
-    case (temperature <= 32):
-      return 'cold'
-    default:
-      return 'warm';
-  }
 }

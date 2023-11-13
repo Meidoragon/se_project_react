@@ -36,8 +36,23 @@ export const defaultClothingItems = [{
     }
   ] 
 
-  export const defaultAPIInfo = {
-    latitude: 51.25,
-    longitude: 0,
-    unitsType: 'imperial'
+export const defaultAPIInfo = {
+  latitude: 51.25,
+  longitude: 0,
+  unitsType: 'imperial'
+}
+
+export const radioOptions = [
+  {
+    text: 'Hot',
+    value: 'hot',
+  },
+  {
+    text: 'Warm',
+    value: 'warm'
+  },
+  {
+    text: 'Cold',
+    value: 'cold'
   }
+]

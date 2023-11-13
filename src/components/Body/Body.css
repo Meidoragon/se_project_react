@@ -1,6 +1,5 @@
 .body{
     padding: 28px 0 0;
-    background-color:orange;
     /* min-height: 500px; */
 }
 
@@ -88,7 +87,6 @@
 }
 
 .body__clothing-cards{
-    background-color:purple;
     list-style-type: none;
     margin: 0;
     padding: 0;
