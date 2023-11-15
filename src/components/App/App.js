@@ -1,4 +1,3 @@
-// import React from 'react';
 import { useState, useEffect } from 'react';
 import './App.css';
 import '../../vendor/normalize.css';
@@ -11,7 +10,7 @@ import ItemModal from '../ItemModal/ItemModal.js';
 import { callWeatherAPI, parseResponse, parseWeatherCode } from '../../utils/WeatherAPI.js';
 
 export default function App() {
-  const [userName, setUsername] = useState(`The "Zero Degree Longitude Club" President`);
+  const userName = `The "Zero Degree Longitude Club" President`; 
   const [isDay, setIsDay] = useState('true'); 
   const [activeModal, setActiveModal] = useState('');
   const [selectedCard, setSelectedCard] = useState({});
@@ -32,7 +31,7 @@ export default function App() {
 
   function submitGarmentForm(evt) {
     evt.preventDefault();
-    // setActiveModal('');
+    setActiveModal('');
   }
 
   function openCardPopup(item){
@@ -53,7 +52,7 @@ export default function App() {
   }
 
   useEffect(() => {
-    /*const weatherInfo =*/ callWeatherAPI(defaultAPIInfo).then((item) => {
+    callWeatherAPI(defaultAPIInfo).then((item) => {
       return parseResponse(item);
     }).then((data) => {
       setTemperature(data.temperature);
