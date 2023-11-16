@@ -2,9 +2,9 @@
 import { useMemo } from 'react';
 import ItemCard from '../ItemCard/ItemCard.js';
 import WeatherCard from '../WeatherCard/WeatherCard.js';
-import './Body.css';
+import './Main.css';
 
-export default function Body({time, weather, temperature, clothingItems, onCardSelection}){
+export default function Main({time, weather, temperature, clothingItems, onCardSelection}){
 
   const weatherType = useMemo(() => {
     if (temperature > 85) {
@@ -21,11 +21,11 @@ export default function Body({time, weather, temperature, clothingItems, onCardS
   })
 
   return (
-    <div className='body'>
+    <main className='main'>
       <WeatherCard time={time}  weather={weather} temperature={temperature}/>
-      <p className='body__forecast'>Today is {temperature}° F / You may want to wear:</p>
+      <p className='main__forecast'>Today is {temperature}° F / You may want to wear:</p>
       {createClothingCards(filteredClothingItems, onCardSelection)}
-    </div>
+    </main>
   )
 }
 
@@ -33,10 +33,10 @@ export default function Body({time, weather, temperature, clothingItems, onCardS
 
 function createClothingCards(itemList, onCardSelection){
   return(
-    <ul className='body__clothing-cards'>
+    <ul className='main__clothing-cards'>
       {itemList.map(card => {
         return (
-          <li key={card._id} className='body__clothing-card'>
+          <li key={card._id} className='main__clothing-card'>
             <ItemCard card={card} onCardSelection={onCardSelection} />
           </li>)
       })}      

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import '../../vendor/normalize.css';
 import Header from '../Header/Header.js';
-import Body from '../Body/Body.js';
+import Main from '../Main/Main.js';
 import Footer from '../Footer/Footer.js';
 import { defaultClothingItems, defaultAPIInfo, radioOptions } from '../../utils/constants';
 import ModalWithForm from '../ModalWithForm/ModalWithForm';
@@ -22,7 +22,7 @@ export default function App() {
     setActiveModal('create');
   }
 
-  function handleGarmentFormCloseClick(evt) {
+  function handleOverlay(evt) {
     if (evt.target !== evt.currentTarget) {
       return;
     }
@@ -31,7 +31,7 @@ export default function App() {
 
   function submitGarmentForm(evt) {
     evt.preventDefault();
-    setActiveModal('');
+    closePopup();
   }
 
   function openCardPopup(item){
@@ -39,16 +39,9 @@ export default function App() {
     setActiveModal('preview');
   }
 
-  function closePopup (evt) {
+  function closePopup () {
     setActiveModal('');
     setSelectedCard({}); 
-  }
-
-  function handleCardCloseClick(evt) {
-    if(evt.target !== evt.currentTarget) {
-      return;
-    }
-    closePopup();
   }
 
   useEffect(() => {
@@ -59,8 +52,10 @@ export default function App() {
       setWeather(parseWeatherCode(data.weatherCode));
       setLocation(data.location)
       setIsDay(data.dateTime >= data.sunrise && data.dateTime <= data.sunset ? true : false)
+    }).catch((res) => {
+      console.error(`Error: ${res.status}`);
     })
-  });
+  }, []);
 
   useEffect(() => {
     if (!activeModal) return;
@@ -78,14 +73,14 @@ export default function App() {
   return (
     <div className='page'>
       <Header locationName={location} userName={userName} openGarmentForm={openGarmentForm}/>
-      <Body clothingItems={defaultClothingItems}
+      <Main clothingItems={defaultClothingItems}
         temperature={temperature}
         time={isDay ? 'day' : 'night'}
         weather={weather}
         onCardSelection={openCardPopup}/>
       <Footer />
       {activeModal === 'create' && (
-      <ModalWithForm title='New garment' name="new-garment" buttonText='Add garment' onClick={handleGarmentFormCloseClick} onSubmit={submitGarmentForm}>
+      <ModalWithForm title='New garment' name="new-garment" buttonText='Add garment' onClose={closePopup} onOverlayClick={handleOverlay} onSubmit={submitGarmentForm}>
         <label className='form-modal__input-label'>
           Name
           <input className='form-modal__input' type='text' name='name' minLength='1' maxLength='30' placeholder='Name'/>
@@ -106,14 +101,14 @@ export default function App() {
                 value={choice.value} 
                 name='weather'
               />
-              <label  className='form-modal__radio-button-label' for={choice.value}>{choice.text}</label>
+              <label  className='form-modal__radio-button-label' htmlFor={choice.value}>{choice.text}</label>
             </div>
           )
           })}
         </fieldset>
       </ModalWithForm>)}
       {activeModal === 'preview' && 
-        <ItemModal item={selectedCard} onClick={handleCardCloseClick} />
+        <ItemModal item={selectedCard} onClose={closePopup} onOverlayClick={handleOverlay} />
       }
     </div>
   );
