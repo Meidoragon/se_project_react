@@ -18,7 +18,7 @@ export default function App() {
   const [temperature, setTemperature] = useState(0);
   const [weather, setWeather] = useState('clear');
   const [location, setLocation] = useState('');
-  const [tempUnitIsC, setCurrentTempUnit] = useState(false);
+  const [isTempUnitC, setCurrentTempUnit] = useState(false);
   
   function openGarmentForm() {
     setActiveModal('create');
@@ -47,7 +47,7 @@ export default function App() {
   }
 
   function handleTempUnitSwitch() {
-    setCurrentTempUnit(!tempUnitIsC);
+    setCurrentTempUnit(!isTempUnitC);
   }
 
   useEffect(() => {
@@ -78,7 +78,7 @@ export default function App() {
   
   return (
     <div className='page'>
-      <CurrentTempUnitContext.Provider value ={{tempUnitIsC, handleTempUnitSwitch}}>
+      <CurrentTempUnitContext.Provider value ={{isTempUnitC: isTempUnitC, handleTempUnitSwitch}}>
         <Header locationName={location} userName={userName} openGarmentForm={openGarmentForm}/>
         <Main clothingItems={defaultClothingItems}
           temperature={temperature}

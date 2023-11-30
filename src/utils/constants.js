@@ -36,10 +36,19 @@ export const defaultClothingItems = [{
     }
   ] 
 
+
+//let's stretch the definition of constant a bit, shall we?
+export const convertKelvinToCelsius = function (temperature) {
+  return temperature - 273;
+}
+
+export const convertKelvinToFarenheit = function (temperature) {
+  return Math.round(temperature * 9 / 5 - 459);
+}
+
 export const defaultAPIInfo = {
   latitude: 51.25,
   longitude: 0,
-  unitsType: 'imperial'
 }
 
 export const radioOptions = [
