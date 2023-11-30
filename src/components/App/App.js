@@ -17,6 +17,7 @@ export default function App() {
   const [temperature, setTemperature] = useState(0);
   const [weather, setWeather] = useState('clear');
   const [location, setLocation] = useState('');
+  const [currentTempUnit, setCurrentTempUnit] = useState('C');
   
   function openGarmentForm() {
     setActiveModal('create');
