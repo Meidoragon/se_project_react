@@ -9,6 +9,7 @@
 .header__container{
     display: flex;
     align-items: center;
+    gap: 20px;
 }
 
 .header__logo{
@@ -23,7 +24,7 @@
 
 .header__button{
     padding: 0;
-    margin: 8px 0;
+    margin: 8px;
     border: none;
     background-color: #fff0;
     color: #000;
@@ -32,7 +33,7 @@
 }
 
 .header__username{
-    margin: 8px 0 7px 20px;
+    margin: 8px 0 7px;
 }
 
 .header__avatar{

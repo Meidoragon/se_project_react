@@ -1,6 +1,7 @@
 import React from 'react';
 import './Header.css';
 import headerLogo from'../../images/logo.svg';
+import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 
 export default function Header({locationName, userName, openGarmentForm}){
   const currentTime = new Date().toLocaleString('default', {month: 'long', day: 'numeric'});
@@ -11,6 +12,7 @@ export default function Header({locationName, userName, openGarmentForm}){
         <p className='header__date'>{currentTime}, {locationName}</p>
       </div>
       <div className='header__container'>
+        <ToggleSwitch />
         <button className='header__button add-clothes-button' type='text' onClick={openGarmentForm}>+Add clothes</button>
         <p className='header__username'>{userName}</p>
         <div className='header__avatar'></div>
