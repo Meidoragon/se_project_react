@@ -68,13 +68,13 @@ export default function App() {
   useEffect(() => {
     if (!activeModal) return;
     function handleEscClose(evt) {
-      if (evt.key === "Escape") {
+      if (evt.key === 'Escape') {
         closePopup()
       }
     };
-    document.addEventListener("keydown", handleEscClose);
+    document.addEventListener('keydown', handleEscClose);
     return () => {
-      document.removeEventListener("keydown", handleEscClose);
+      document.removeEventListener('keydown', handleEscClose);
     };
   }, [activeModal])
   
@@ -94,7 +94,7 @@ export default function App() {
             onCardSelection={openCardPopup}/>
           <Footer />
           {activeModal === 'create' && (
-          <ModalWithForm title='New garment' name="new-garment" buttonText='Add garment' onClose={closePopup} onOverlayClick={handleOverlay} onSubmit={submitGarmentForm}>
+          <ModalWithForm title='New garment' name='new-garment' buttonText='Add garment' onClose={closePopup} onOverlayClick={handleOverlay} onSubmit={submitGarmentForm}>
             <label className='form-modal__input-label'>
               Name
               <input className='form-modal__input' type='text' name='name' minLength='1' maxLength='30' placeholder='Name'/>
@@ -103,7 +103,7 @@ export default function App() {
               Image
               <input className="form-modal__input" type='url' id='formInputLink' name='link' minLength='1' placeholder='Image URL'/>
             </label>
-            <fieldset className="form-modal__radio-buttons">
+            <fieldset className='form-modal__radio-buttons'>
               <legend className='form-modal__radio-title'>Select the weather type:</legend>
               {radioOptions.map((choice, index) => {
               return (
