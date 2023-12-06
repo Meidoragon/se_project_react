@@ -87,7 +87,7 @@ export default function App() {
           onCardSelection={openCardPopup}/>
         <Footer />
         {activeModal === 'create' && (
-        <ModalWithForm title='New garment' name='new-garment' buttonText='Add garment' onClose={closePopup} onOverlayClick={handleOverlay} onSubmit={submitGarmentForm}>
+        <ModalWithForm title='New garment' name='new-garment' submitButtonText='Add garment' onClose={closePopup} onOverlayClick={handleOverlay} onSubmit={submitGarmentForm}>
           <label className='form-modal__input-label'>
             Name
             <input className='form-modal__input' type='text' name='name' minLength='1' maxLength='30' placeholder='Name'/>
