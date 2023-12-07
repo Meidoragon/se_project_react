@@ -68,7 +68,15 @@ export default function App() {
       </ul>
     )
   }
-
+  
+  function openProfile() {
+    console.log("click profile!");
+  }
+  
+  function returnHome() {
+    console.log("click logo!");
+  }
+  
   useEffect(() => {
     callWeatherAPI(defaultAPIInfo).then((item) => {
       return parseResponse(item);
@@ -98,7 +106,7 @@ export default function App() {
   return (
     <CurrentTempUnitContext.Provider value ={{isTempUnitC: isTempUnitC, handleTempUnitSwitch}}>
       <div className='page'>
-        <Header locationName={location} userName={userName} avatar={avatar} openGarmentForm={openGarmentForm}/>
+        <Header locationName={location} userName={userName} avatar={avatar} openGarmentForm={openGarmentForm} openProfile={openProfile} returnHome={returnHome}/>
         <Switch>
           <Route path='/profile'>
             <Profile

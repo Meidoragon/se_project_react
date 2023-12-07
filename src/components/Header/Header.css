@@ -1,47 +1,56 @@
 .header{
-    margin: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 60px;
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 60px;
 }
 
 .header__container{
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header__nav-item{
+  color: #000;
+  text-decoration: none;
 }
 
 .header__logo{
-    height: 40px;
-    width: 89px;
-    margin: 0 24px 0 0;
+  height: 40px;
+  width: 89px;
+  margin: 0 24px 0 0;
 }
 
 .header__date{
-    margin: 11px 0 5px;
+  margin: 11px 0 5px;
 }
 
 .header__button{
-    padding: 0;
-    margin: 8px;
-    border: none;
-    background-color: #fff0;
-    color: #000;
-    white-space: nowrap;
-    font-weight: 700;
+  padding: 0;
+  margin: 8px;
+  border: none;
+  background-color: #fff0;
+  color: #000;
+  /* white-space: nowrap; */
+  font-weight: 700;
+}
+
+.header__user-info{
+  display: flex;
 }
 
 .header__username{
-    margin: 8px 0 7px;
+  margin: 8px 0 7px;
 }
 
 .header__avatar{
-    margin-left: 12px;
-    width: 40px;
-    height: 40px;
+  margin-left: 12px;
+  width: 40px;
+  height: 40px;
 }
 
 .header__button:hover{
-    cursor: pointer;
+  cursor: pointer;
 }
