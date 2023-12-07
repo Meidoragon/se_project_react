@@ -1,10 +1,13 @@
 import "./Profile.css";
-import React from "react";
+import React from 'react';
+import Sidebar from '../Sidebar/Sidebar.js';
+import ClothesSection from '../ClothesSection/ClothesSection.js';
 
-export default function Profile() {
+export default function Profile({clothingItems, userName, avatar, openNewGarmentForm, createClothingCards}) {
   return (
-    <>
-      hello!
-    </>
+    <div className='profile'>
+      <Sidebar userName={userName} avatar={avatar}/>
+      <ClothesSection clothingItems={clothingItems} openNewGarmentForm={openNewGarmentForm} createClothingCards={createClothingCards} />
+    </div>
   )
 }

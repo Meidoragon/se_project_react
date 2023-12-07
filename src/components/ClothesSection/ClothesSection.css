@@ -1,0 +1,56 @@
+.clothes-section{
+  margin: 0;
+  padding: 0 0 0 15px;
+  color: #000000;
+  /* background-color: blanchedalmond; */
+  width: 100%;
+}
+
+.clothes-section__header{
+  /* margin: 0 0 0 20px; */
+  display: flex;
+}
+
+.clothes-section__title{
+  /* font-size: 20px; */
+  text-align: center;
+  margin: auto 20px auto 0;
+  padding: 0;
+}
+
+.clothes-section__button{
+  padding: 0;
+  margin: 8px;
+  border: none;
+  background-color: #fff0;
+  color: #0000009A;
+  white-space: nowrap;
+  /* font-size: 20px; */
+  font-weight: 700;
+}
+
+.clothes-section__button:hover{
+  cursor: pointer;
+}
+
+.clothes-section__clothing-cards{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 328px);
+  grid-template-rows: auto;
+  justify-content: center;
+  justify-items: center;
+  row-gap: 20px;
+  column-gap: 17px;
+}
+
+.clothes-section__clothing-card{
+height: 328px;
+width: 328px;
+border-radius: 20px;
+background: #e9e9e9 50% / cover no-repeat;
+border: 1px solid #00000048;
+overflow: hidden;
+}

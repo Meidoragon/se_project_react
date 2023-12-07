@@ -3,7 +3,7 @@ import './Header.css';
 import headerLogo from'../../images/logo.svg';
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 
-export default function Header({locationName, userName, openGarmentForm}){
+export default function Header({locationName, userName, avatar, openGarmentForm}){
   const currentTime = new Date().toLocaleString('default', {month: 'long', day: 'numeric'});
   return (
     <header className='header'>
@@ -15,7 +15,7 @@ export default function Header({locationName, userName, openGarmentForm}){
         <ToggleSwitch />
         <button className='header__button add-clothes-button' type='text' onClick={openGarmentForm}>+Add clothes</button>
         <p className='header__username'>{userName}</p>
-        <div className='header__avatar'></div>
+        <img className='header__avatar' src={avatar} alt='user avatar'/>
       </div>
     </header>
   ) 

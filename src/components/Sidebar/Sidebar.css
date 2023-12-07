@@ -1,0 +1,31 @@
+.sidebar{
+  padding: 0;
+  margin: 6px 0 0;
+  /* color: red; */
+  /* background-color: blue; */
+  max-width: 400px;
+  min-width: 240px;
+  width: 25%;
+}
+
+.sidebar__user-info{
+  display:flex;
+  gap: 15px;
+  max-height: 40px;
+  overflow:visible;
+}
+
+.sidebar__user-avatar{
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.sidebar__user-name{
+  text-align: left;
+  margin: auto 0;
+  /* display: inline-block; */
+  /* max-width: 345px; */
+  /* overflow: hidden; */
+  /* text-overflow: ellipsis; */
+}
