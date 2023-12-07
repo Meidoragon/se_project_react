@@ -6,11 +6,11 @@ import Header from '../Header/Header.js';
 import Main from '../Main/Main.js';
 import Footer from '../Footer/Footer.js';
 import Profile from '../Profile/Profile.js';
-import { defaultClothingItems, defaultAPIInfo, radioOptions } from '../../utils/constants';
-import ModalWithForm from '../ModalWithForm/ModalWithForm';
+import { defaultClothingItems, defaultAPIInfo } from '../../utils/constants';
 import ItemModal from '../ItemModal/ItemModal.js';
 import { callWeatherAPI, parseResponse, parseWeatherCode } from '../../utils/WeatherAPI.js';
 import { CurrentTempUnitContext } from '../../contexts/CurrentTemperatureUnitContext';
+import AddItemModal from '../AddItemModal/AddItemModal.js'
 import ItemCard from '../ItemCard/ItemCard.js';
 import avatar from '../../images/avatar.png';
 
@@ -25,6 +25,7 @@ export default function App() {
   const [weather, setWeather] = useState('clear');
   const [location, setLocation] = useState('');
   const [isTempUnitC, setCurrentTempUnit] = useState(false);
+  const [clothingItems, setClothingItems] = useState([]);
   
   function openGarmentForm() {
     setActiveModal('create');
@@ -37,8 +38,15 @@ export default function App() {
     closePopup()
   }
 
-  function submitGarmentForm(evt) {
-    evt.preventDefault();
+  function submitGarmentForm(values) {
+    // console.log(values);
+    const newItem = {
+      ...values,
+      _id: 70,
+    }
+    console.log(newItem);
+
+    // addItem(newItem);
     closePopup();
   }
 
@@ -56,6 +64,15 @@ export default function App() {
     setCurrentTempUnit(!isTempUnitC);
   }
 
+  function addItem(item){
+    setClothingItems([...clothingItems, item]);
+  }
+
+  function deleteItem(){
+    setClothingItems(clothingItems.filter((item) => item._id !== selectedCard._id))
+    closePopup();
+  }
+
   function createClothingCards(itemList, parentComponentName){
     return(
       <ul className={`${parentComponentName}__clothing-cards`}>
@@ -68,16 +85,13 @@ export default function App() {
       </ul>
     )
   }
-  
-  function openProfile() {
-    console.log("click profile!");
-  }
-  
-  function returnHome() {
-    console.log("click logo!");
-  }
-  
+ 
   useEffect(() => {
+    setClothingItems(defaultClothingItems)
+  }, clothingItems)
+
+  useEffect(() => {
+
     callWeatherAPI(defaultAPIInfo).then((item) => {
       return parseResponse(item);
     }).then((data) => {
@@ -103,22 +117,31 @@ export default function App() {
     };
   }, [activeModal])
   
+
   return (
-    <CurrentTempUnitContext.Provider value ={{isTempUnitC: isTempUnitC, handleTempUnitSwitch}}>
+    <CurrentTempUnitContext.Provider value ={{
+      isTempUnitC: isTempUnitC, 
+      handleTempUnitSwitch
+    }}>
       <div className='page'>
-        <Header locationName={location} userName={userName} avatar={avatar} openGarmentForm={openGarmentForm} openProfile={openProfile} returnHome={returnHome}/>
+        <Header 
+          locationName={location} 
+          userName={userName} 
+          avatar={avatar} 
+          openGarmentForm={openGarmentForm} 
+        />
         <Switch>
           <Route path='/profile'>
             <Profile
               createClothingCards={createClothingCards}
               openNewGarmentForm={openGarmentForm}
-              clothingItems={defaultClothingItems}
+              clothingItems={clothingItems}
               avatar={avatar}
               userName={userName}
             />
           </Route>
           <Route path='/'>
-            <Main clothingItems={defaultClothingItems}
+            <Main clothingItems={clothingItems}
               temperature={temperature}
               time={isDay ? 'day' : 'night'}
               weather={weather}
@@ -128,36 +151,20 @@ export default function App() {
         </Switch>
 
         <Footer />
-        {activeModal === 'create' && (
-        <ModalWithForm title='New garment' name='new-garment' buttonText='Add garment' onClose={closePopup} onOverlayClick={handleOverlay} onSubmit={submitGarmentForm}>
-          <label className='form-modal__input-label'>
-            Name
-            <input className='form-modal__input' type='text' name='name' minLength='1' maxLength='30' placeholder='Name'/>
-          </label>
-          <label className='form-modal__input-label'>
-            Image
-            <input className="form-modal__input" type='url' id='formInputLink' name='link' minLength='1' placeholder='Image URL'/>
-          </label>
-          <fieldset className='form-modal__radio-buttons'>
-            <legend className='form-modal__radio-title'>Select the weather type:</legend>
-            {radioOptions.map((choice, index) => {
-            return (
-              <div key={index}>
-                <input 
-                  className='form-modal__radio-button' 
-                  type='radio' 
-                  id={choice.value} 
-                  value={choice.value} 
-                  name='weather'
-                />
-                <label  className='form-modal__radio-button-label' htmlFor={choice.value}>{choice.text}</label>
-              </div>
-            )
-            })}
-          </fieldset>
-        </ModalWithForm>)}
+        {activeModal === 'create' && 
+          <AddItemModal
+            onOverlayClick={handleOverlay}
+            onClose={closePopup}
+            onSubmit={submitGarmentForm}
+          />
+        }
         {activeModal === 'preview' && 
-          <ItemModal item={selectedCard} onClose={closePopup} onOverlayClick={handleOverlay} />
+          <ItemModal 
+            item={selectedCard} 
+            onClose={closePopup} 
+            onDelete={deleteItem}
+            onOverlayClick={handleOverlay} 
+          />
         }
       </div>
     </CurrentTempUnitContext.Provider>

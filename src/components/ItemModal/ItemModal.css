@@ -46,8 +46,17 @@
   margin: 0;
 }
 
+.item-modal__container{
+  display: flex;
+  justify-content: space-between;
+}
+
 .item-modal__text{
   padding: 0;
+  margin: 12px 0 0;
+}
+
+.item-modal__button{
   margin: 12px 0 0;
 }
 
