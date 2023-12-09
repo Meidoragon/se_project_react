@@ -6,13 +6,14 @@ import Header from '../Header/Header.js';
 import Main from '../Main/Main.js';
 import Footer from '../Footer/Footer.js';
 import Profile from '../Profile/Profile.js';
-import { defaultClothingItems, defaultAPIInfo } from '../../utils/constants';
+import { defaultAPIInfo } from '../../utils/constants';
 import ItemModal from '../ItemModal/ItemModal.js';
 import { callWeatherAPI, parseResponse, parseWeatherCode } from '../../utils/WeatherAPI.js';
 import { CurrentTempUnitContext } from '../../contexts/CurrentTemperatureUnitContext';
 import AddItemModal from '../AddItemModal/AddItemModal.js'
 import ItemCard from '../ItemCard/ItemCard.js';
 import avatar from '../../images/avatar.png';
+import { getItems, addItem as addItemToDB, deleteItem as deleteItemFromDB } from '../../utils/api.js';
 
 export default function App() {
   const userName = `The "Zero Degree Longitude Club" President`;
@@ -26,7 +27,7 @@ export default function App() {
   const [location, setLocation] = useState('');
   const [isTempUnitC, setCurrentTempUnit] = useState(false);
   const [clothingItems, setClothingItems] = useState([]);
-  
+
   function openGarmentForm() {
     setActiveModal('create');
   }
@@ -38,16 +39,12 @@ export default function App() {
     closePopup()
   }
 
-  function submitGarmentForm(values) {
-    // console.log(values);
-    const newItem = {
-      ...values,
-      _id: 70,
-    }
-    console.log(newItem);
-
-    // addItem(newItem);
-    closePopup();
+  function submitGarmentForm(item) {
+    addItem(item).then(() => {
+      closePopup();
+    }).catch((response) => {
+      console.error(`Error: ${response.status}`);
+    })
   }
 
   function openCardPopup(item){
@@ -65,12 +62,18 @@ export default function App() {
   }
 
   function addItem(item){
-    setClothingItems([...clothingItems, item]);
+    return addItemToDB(item).then((/*response*/) => {
+      // console.log(response);
+      //TODO: find a way to get _id from JSON.server response
+      setClothingItems([...clothingItems, item]) 
+    })                                           
   }
 
   function deleteItem(){
-    setClothingItems(clothingItems.filter((item) => item._id !== selectedCard._id))
-    closePopup();
+    deleteItemFromDB(selectedCard._id).then(() => {
+      setClothingItems(clothingItems.filter((item) => item._id !== selectedCard._id))
+      closePopup();
+    })
   }
 
   function createClothingCards(itemList, parentComponentName){
@@ -87,11 +90,14 @@ export default function App() {
   }
  
   useEffect(() => {
-    setClothingItems(defaultClothingItems)
-  }, clothingItems)
+    getItems().then((response) => {
+      setClothingItems(response)
+    }).catch((response) => {
+      console.error(`Error: ${response.status}`)
+    })
+  }, [])
 
   useEffect(() => {
-
     callWeatherAPI(defaultAPIInfo).then((item) => {
       return parseResponse(item);
     }).then((data) => {
@@ -99,8 +105,8 @@ export default function App() {
       setWeather(parseWeatherCode(data.weatherCode));
       setLocation(data.location)
       setIsDay(data.dateTime >= data.sunrise && data.dateTime <= data.sunset ? true : false)
-    }).catch((res) => {
-      console.error(`Error: ${res.status}`);
+    }).catch((response) => {
+      console.error(`Error: ${response.status}`);
     })
   }, []);
 

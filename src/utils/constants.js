@@ -36,6 +36,7 @@ export const defaultClothingItems = [{
     }
   ] 
 
+export const apiBaseUrl = 'http://localhost:3001';
 
 //let's stretch the definition of constant a bit, shall we?
 export const convertKelvinToCelsius = function (temperature) {
