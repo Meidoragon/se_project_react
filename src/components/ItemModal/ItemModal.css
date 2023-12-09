@@ -56,8 +56,16 @@
   margin: 12px 0 0;
 }
 
-.item-modal__button{
+.item-modal__delete-button{
   margin: 12px 0 0;
+  border: none;
+  background-color: #FFFFFF00;
+  color: #FF4D00;
+  max-height: 24px;
+}
+
+.item-modal__delete-button:hover{
+  cursor: pointer;
 }
 
 .text_image-overlay{

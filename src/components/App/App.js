@@ -62,10 +62,8 @@ export default function App() {
   }
 
   function addItem(item){
-    return addItemToDB(item).then((/*response*/) => {
-      // console.log(response);
-      //TODO: find a way to get _id from JSON.server response
-      setClothingItems([...clothingItems, item]) 
+    return addItemToDB(item).then((response) => {
+      setClothingItems([...clothingItems, response]) 
     })                                           
   }
 

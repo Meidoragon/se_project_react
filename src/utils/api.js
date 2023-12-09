@@ -20,7 +20,7 @@ export function addItem(item){
     body: JSON.stringify(item),
   }).then((response) => {
     if (response.ok) {
-      return response
+      return response.json();
     } else {
       return Promise.reject(`Error: ${response.status}`);
     }

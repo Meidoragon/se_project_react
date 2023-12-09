@@ -11,7 +11,7 @@ export default function ItemModal({item, onClose, onDelete, onOverlayClick, isHo
           <p className='item-modal__text'>{item.name}</p>
           <p className='item-modal__text'>Weather: {item.weather}</p>
         </div>
-        <button type='button' onClick={onDelete} className='item-modal__button button'>Delete Card</button>
+        <button type='button' onClick={onDelete} className='item-modal__delete-button button'>Delete Card</button>
       </div>
     </Modal>
   )
