@@ -1,28 +1,14 @@
 //import './AddItemModal.css';
-import { useState } from 'react';
+import { useForm } from '../../hooks/useForm.js'
 import ModalWithForm from '../ModalWithForm/ModalWithForm.js';
 import { radioOptions } from '../../utils/constants.js';
 
-export default function AddItemModal({onSubmit, onOverlayClick, onClose}){
-  const [name, setName] = useState('');
-  const [link, setLink] = useState('');
-  const [weather, setWeather] = useState('hot');
+export default function AddItemModal({isLoading, onSubmit, onOverlayClick, onClose}){
+  const {values, handleChange/*, setValues*/} = useForm({'name': '', 'link': '', 'weather': 'hot'});
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    onSubmit({name, link, weather})
-  }
-
-  const handleNameChange = (evt) => {
-    setName(evt.target.value);
-  }
-
-  const handleLinkChange = (evt) => {
-    setLink(evt.target.value);
-  }
-
-  const handleTemperatureChange = (evt) => {
-    setWeather(evt.target.value);
+    onSubmit(values);
   }
 
   return(
@@ -30,7 +16,8 @@ export default function AddItemModal({onSubmit, onOverlayClick, onClose}){
       <ModalWithForm 
         title='New garment' 
         name='new-garment' 
-        buttonText='Add garment' 
+        buttonText='Add garment'
+        isLoading={isLoading}
         onClose={onClose} 
         onOverlayClick={onOverlayClick} 
         onSubmit={handleSubmit}
@@ -41,11 +28,11 @@ export default function AddItemModal({onSubmit, onOverlayClick, onClose}){
             className='form-modal__input' 
             type='text' 
             name='name'
-            value={name} 
+            value={values.name} 
             minLength='1' 
             maxLength='30' 
             placeholder='Name'
-            onChange={handleNameChange}
+            onChange={handleChange}
           />
         </label>
         <label className='form-modal__input-label'>
@@ -55,10 +42,10 @@ export default function AddItemModal({onSubmit, onOverlayClick, onClose}){
             // type='url' 
             id='formInputLink' 
             name='link' 
-            value={link}
+            value={values.link}
             minLength='1' 
             placeholder='Image URL'
-            onChange={handleLinkChange}
+            onChange={handleChange}
           />
         </label>
         <fieldset className='form-modal__radio-buttons'>
@@ -71,9 +58,9 @@ export default function AddItemModal({onSubmit, onOverlayClick, onClose}){
                 type='radio' 
                 id={choice.value} 
                 value={choice.value}
-                checked={weather===choice.value}
+                checked={values.weather===choice.value}
                 name='weather'
-                onChange={handleTemperatureChange}
+                onChange={handleChange}
               />
               <label
                 className='form-modal__radio-button-label' 

@@ -28,6 +28,10 @@
   background-color: #FFF;
 }
 
+.modal__content_is-horizontal{
+  max-width: 670px
+}
+
 .modal__close-button{
   padding: 0;
   margin: 0;

@@ -2,21 +2,19 @@
 import { useMemo, useContext } from 'react';
 import WeatherCard from '../WeatherCard/WeatherCard.js';
 import { CurrentTempUnitContext } from '../../contexts/CurrentTemperatureUnitContext.js';
-import { convertKelvinToCelsius, convertKelvinToFarenheit } from '../../utils/constants.js';
 import './Main.css';
 
 export default function Main({time, weather, temperature, clothingItems, createCards}){
   const {isTempUnitC} = useContext(CurrentTempUnitContext); 
   const weatherType = useMemo(() => {
-    const convertedTemp = convertKelvinToFarenheit(temperature);
-    if (convertedTemp > 85) {
+    if (temperature.farenheit > 85) {
       return 'hot';
-    } else if (convertedTemp < 66) {
+    } else if (temperature.farenheit < 66) {
       return 'cold';
     } else {
       return 'warm';
     }
-  }, [temperature])
+  }, [temperature.farenheit])
 
   const filteredClothingItems = clothingItems.filter((item) => {
     return item.weather.toLowerCase() === weatherType;
@@ -27,8 +25,8 @@ export default function Main({time, weather, temperature, clothingItems, createC
       <WeatherCard time={time}  weather={weather} temperature={temperature}/>
       <p className='main__forecast'>Today is {
         isTempUnitC 
-        ? `${convertKelvinToCelsius(temperature)}° C`
-        : `${convertKelvinToFarenheit(temperature)}° F`
+        ? `${temperature.celsius}° C`
+        : `${temperature.farenheit}° F`
       } / You may want to wear:</p>
       {createCards(filteredClothingItems, 'main')}
       {/* {createClothingCards(filteredClothingItems, onCardSelection)} */}

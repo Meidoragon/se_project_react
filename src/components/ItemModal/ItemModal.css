@@ -51,6 +51,12 @@
   justify-content: space-between;
 }
 
+.item-modal__horizontal-text-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .item-modal__text{
   padding: 0;
   margin: 12px 0 0;
@@ -64,7 +70,7 @@
   max-height: 24px;
 }
 
-.item-modal__delete-button:hover{
+.item-modal__delete-button:hover:not(.delete-inactive){
   cursor: pointer;
 }
 

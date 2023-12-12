@@ -6,14 +6,17 @@ import Header from '../Header/Header.js';
 import Main from '../Main/Main.js';
 import Footer from '../Footer/Footer.js';
 import Profile from '../Profile/Profile.js';
-import { defaultAPIInfo } from '../../utils/constants';
+import { convertKelvinToCelsius, convertKelvinToFarenheit, defaultAPIInfo } from '../../utils/constants';
 import ItemModal from '../ItemModal/ItemModal.js';
 import { callWeatherAPI, parseResponse, parseWeatherCode } from '../../utils/WeatherAPI.js';
 import { CurrentTempUnitContext } from '../../contexts/CurrentTemperatureUnitContext';
 import AddItemModal from '../AddItemModal/AddItemModal.js'
 import ItemCard from '../ItemCard/ItemCard.js';
 import avatar from '../../images/avatar.png';
-import { getItems, addItem as addItemToDB, deleteItem as deleteItemFromDB } from '../../utils/api.js';
+import { getItems, 
+         handleApiError,
+         addItem as addItemToDB, 
+         deleteItem as deleteItemFromDB } from '../../utils/api.js';
 
 export default function App() {
   const userName = `The "Zero Degree Longitude Club" President`;
@@ -22,11 +25,17 @@ export default function App() {
   const [isDay, setIsDay] = useState('true'); 
   const [activeModal, setActiveModal] = useState('');
   const [selectedCard, setSelectedCard] = useState({});
-  const [temperature, setTemperature] = useState(0);
+  const [temperature, setTemperature] = useState({
+    kelvin: 0,
+    celsius: -273,
+    farenheit: -460,
+  });
   const [weather, setWeather] = useState('clear');
   const [location, setLocation] = useState('');
   const [isTempUnitC, setCurrentTempUnit] = useState(false);
   const [clothingItems, setClothingItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  //const [weatherData, setWeatherData] = useState({}); 
 
   function openGarmentForm() {
     setActiveModal('create');
@@ -40,11 +49,13 @@ export default function App() {
   }
 
   function submitGarmentForm(item) {
+    setIsLoading(true)
     addItem(item).then(() => {
       closePopup();
-    }).catch((response) => {
-      console.error(`Error: ${response.status}`);
-    })
+    }).catch(handleApiError).finally(() => {
+      setIsLoading(false);
+    }
+    )
   }
 
   function openCardPopup(item){
@@ -62,16 +73,22 @@ export default function App() {
   }
 
   function addItem(item){
+    setIsLoading(true);
     return addItemToDB(item).then((response) => {
-      setClothingItems([...clothingItems, response]) 
+      setClothingItems([response, ...clothingItems]) 
+    }).catch(handleApiError).finally(() => {
+      setIsLoading(false);
     })                                           
   }
 
   function deleteItem(){
+    setIsLoading(true)
     deleteItemFromDB(selectedCard._id).then(() => {
       setClothingItems(clothingItems.filter((item) => item._id !== selectedCard._id))
       closePopup();
-    })
+    }).catch(handleApiError).finally(() => {
+      setIsLoading(false);
+    });
   }
 
   function createClothingCards(itemList, parentComponentName){
@@ -99,10 +116,16 @@ export default function App() {
     callWeatherAPI(defaultAPIInfo).then((item) => {
       return parseResponse(item);
     }).then((data) => {
-      setTemperature(data.temperature);
+      const kelvin = data.temperature;
+      setTemperature({
+        kelvin: kelvin,
+        farenheit: convertKelvinToFarenheit(kelvin),
+        celsius: convertKelvinToCelsius(kelvin), 
+      });
       setWeather(parseWeatherCode(data.weatherCode));
       setLocation(data.location)
       setIsDay(data.dateTime >= data.sunrise && data.dateTime <= data.sunset ? true : false)
+      
     }).catch((response) => {
       console.error(`Error: ${response.status}`);
     })
@@ -160,6 +183,7 @@ export default function App() {
             onOverlayClick={handleOverlay}
             onClose={closePopup}
             onSubmit={submitGarmentForm}
+            isLoading={isLoading}
           />
         }
         {activeModal === 'preview' && 
@@ -167,7 +191,8 @@ export default function App() {
             item={selectedCard} 
             onClose={closePopup} 
             onDelete={deleteItem}
-            onOverlayClick={handleOverlay} 
+            onOverlayClick={handleOverlay}
+            isLoading={isLoading} 
           />
         }
       </div>

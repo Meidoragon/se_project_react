@@ -1,40 +1,38 @@
 import { apiBaseUrl as URL } from "./constants";
 
+function checkResponse(response) {
+  if (response.ok) {
+    return response.json();
+  } else {
+    return Promise.reject(`Error: ${response.status}`);
+  }
+}
+
+function request(url, options) {
+  return fetch(url, options).then(checkResponse);
+}
+
 export function getItems(){
   //get items  
-  return fetch(`${URL}/items`).then((response) => {
-    if (response.ok) {
-      return response.json();
-    } else {
-      return Promise.reject(`Error: ${response.status}`);
-    }
-  })
+  return request(`${URL}/items`, {});
 }
 
 export function addItem(item){
-  return fetch(`${URL}/items`, {
+  return request(`${URL}/items`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(item),
-  }).then((response) => {
-    if (response.ok) {
-      return response.json();
-    } else {
-      return Promise.reject(`Error: ${response.status}`);
-    }
   })
 }
 
 export function deleteItem(id){
-  return fetch(`${URL}/items/${id}`, {
+  return request(`${URL}/items/${id}`, {
     'method': 'DELETE',
-  }).then((response) => {
-    if (response.ok) {
-      return response;
-    } else {
-      return Promise.reject(`Error: ${response.status}`);
-    }
   })
+}
+
+export function handleApiError(response) {
+  console.error(`Error: ${response.status}`);
 }
