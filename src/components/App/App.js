@@ -48,16 +48,6 @@ export default function App() {
     closePopup()
   }
 
-  function submitGarmentForm(item) {
-    setIsLoading(true)
-    addItem(item).then(() => {
-      closePopup();
-    }).catch(handleApiError).finally(() => {
-      setIsLoading(false);
-    }
-    )
-  }
-
   function openCardPopup(item){
     setSelectedCard(item)
     setActiveModal('preview');
@@ -75,7 +65,8 @@ export default function App() {
   function addItem(item){
     setIsLoading(true);
     return addItemToDB(item).then((response) => {
-      setClothingItems([response, ...clothingItems]) 
+      closePopup();
+      setClothingItems([response, ...clothingItems]);
     }).catch(handleApiError).finally(() => {
       setIsLoading(false);
     })                                           
@@ -182,7 +173,7 @@ export default function App() {
           <AddItemModal
             onOverlayClick={handleOverlay}
             onClose={closePopup}
-            onSubmit={submitGarmentForm}
+            onSubmit={addItem}
             isLoading={isLoading}
           />
         }
