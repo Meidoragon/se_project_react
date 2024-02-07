@@ -12,12 +12,12 @@ function request(url, options) {
   return fetch(url, options).then(checkResponse);
 }
 
-export function getItems(){
+export function getItems() {
   //get items  
   return request(`${URL}/items`, {});
 }
 
-export function addItem(item){
+export function addItem(item) {
   return request(`${URL}/items`, {
     method: 'POST',
     headers: {
@@ -27,7 +27,7 @@ export function addItem(item){
   })
 }
 
-export function deleteItem(id){
+export function deleteItem(id) {
   return request(`${URL}/items/${id}`, {
     'method': 'DELETE',
   })

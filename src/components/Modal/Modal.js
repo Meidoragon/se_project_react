@@ -1,8 +1,8 @@
 import './Modal.css';
 
 //TODO: Use react context for onOverlayClick and onClose?
-export default function Modal({children, modalType, modifier, additionalClasses ,onOverlayClick, onClose}){
-  
+export default function Modal({ children, modalType, modifier, additionalClasses, onOverlayClick, onClose }) {
+
   const standardModal = (
     <div className={`modal ${modalType}-modal ${additionalClasses}`} onClick={onOverlayClick}>
       <div className={`modal__content ${modalType}-modal__content`}>
@@ -11,7 +11,7 @@ export default function Modal({children, modalType, modifier, additionalClasses 
       </div>
     </div>
   );
-  
+
   const modifiedModal = (
     <div className={`modal ${modalType}-modal ${modalType}-modal_${modifier} ${additionalClasses}`} onClick={onOverlayClick}>
       <div className={`modal__content modal__content_${modifier} ${modalType}-modal__content ${modalType}-modal__content_${modifier}`}>

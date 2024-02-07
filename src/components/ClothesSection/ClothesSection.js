@@ -1,6 +1,6 @@
 import './ClothesSection.css';
 
-export default function ClothesSection({clothingItems, createClothingCards, openNewGarmentForm}) {
+export default function ClothesSection({ clothingItems, createClothingCards, openNewGarmentForm }) {
   return (
     <section className='clothes-section'>
       <div className='clothes-section__header'>

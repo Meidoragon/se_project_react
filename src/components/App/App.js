@@ -13,16 +13,18 @@ import { CurrentTempUnitContext } from '../../contexts/CurrentTemperatureUnitCon
 import AddItemModal from '../AddItemModal/AddItemModal.js'
 import ItemCard from '../ItemCard/ItemCard.js';
 import avatar from '../../images/avatar.png';
-import { getItems, 
-         handleApiError,
-         addItem as addItemToDB, 
-         deleteItem as deleteItemFromDB } from '../../utils/api.js';
+import {
+  getItems,
+  handleApiError,
+  addItem as addItemToDB,
+  deleteItem as deleteItemFromDB
+} from '../../utils/api.js';
 
 export default function App() {
   const userName = `The "Zero Degree Longitude Club" President`;
   //const [userName, setUsername] = useState(`The "Zero Degree Longitude Club" President`); 
   //const [avatar, setAvatar] = useState('./url/to/image.bmp');
-  const [isDay, setIsDay] = useState('true'); 
+  const [isDay, setIsDay] = useState('true');
   const [activeModal, setActiveModal] = useState('');
   const [selectedCard, setSelectedCard] = useState({});
   const [temperature, setTemperature] = useState({
@@ -48,31 +50,31 @@ export default function App() {
     closePopup()
   }
 
-  function openCardPopup(item){
+  function openCardPopup(item) {
     setSelectedCard(item)
     setActiveModal('preview');
   }
 
-  function closePopup () {
+  function closePopup() {
     setActiveModal('');
-    setSelectedCard({}); 
+    setSelectedCard({});
   }
 
   function handleTempUnitSwitch() {
     setCurrentTempUnit(!isTempUnitC);
   }
 
-  function addItem(item){
+  function addItem(item) {
     setIsLoading(true);
     return addItemToDB(item).then((response) => {
       closePopup();
       setClothingItems([response, ...clothingItems]);
     }).catch(handleApiError).finally(() => {
       setIsLoading(false);
-    })                                           
+    })
   }
 
-  function deleteItem(){
+  function deleteItem() {
     setIsLoading(true)
     deleteItemFromDB(selectedCard._id).then(() => {
       setClothingItems(clothingItems.filter((item) => item._id !== selectedCard._id))
@@ -82,19 +84,20 @@ export default function App() {
     });
   }
 
-  function createClothingCards(itemList, parentComponentName){
-    return(
+  function createClothingCards(itemList, parentComponentName) {
+    return (
       <ul className={`${parentComponentName}__clothing-cards`}>
         {itemList.map(card => {
           return (
             <li key={card._id} className={`${parentComponentName}__clothing-card`}>
               <ItemCard card={card} onCardSelection={openCardPopup} />
             </li>)
-        })}      
+        })}
       </ul>
     )
   }
- 
+
+  // get clothing items 
   useEffect(() => {
     getItems().then((response) => {
       setClothingItems(response)
@@ -103,6 +106,7 @@ export default function App() {
     })
   }, [])
 
+  // get weather infomation
   useEffect(() => {
     callWeatherAPI(defaultAPIInfo).then((item) => {
       return parseResponse(item);
@@ -111,17 +115,18 @@ export default function App() {
       setTemperature({
         kelvin: kelvin,
         farenheit: convertKelvinToFarenheit(kelvin),
-        celsius: convertKelvinToCelsius(kelvin), 
+        celsius: convertKelvinToCelsius(kelvin),
       });
       setWeather(parseWeatherCode(data.weatherCode));
       setLocation(data.location)
       setIsDay(data.dateTime >= data.sunrise && data.dateTime <= data.sunset ? true : false)
-      
+
     }).catch((response) => {
       console.error(`Error: ${response.status}`);
     })
   }, []);
 
+  // listen for key inputs and close modal when key is 'esc'
   useEffect(() => {
     if (!activeModal) return;
     function handleEscClose(evt) {
@@ -134,19 +139,19 @@ export default function App() {
       document.removeEventListener('keydown', handleEscClose);
     };
   }, [activeModal])
-  
+
 
   return (
-    <CurrentTempUnitContext.Provider value ={{
-      isTempUnitC: isTempUnitC, 
+    <CurrentTempUnitContext.Provider value={{
+      isTempUnitC: isTempUnitC,
       handleTempUnitSwitch
     }}>
       <div className='page'>
-        <Header 
-          locationName={location} 
-          userName={userName} 
-          avatar={avatar} 
-          openGarmentForm={openGarmentForm} 
+        <Header
+          locationName={location}
+          userName={userName}
+          avatar={avatar}
+          openGarmentForm={openGarmentForm}
         />
         <Switch>
           <Route path='/profile'>
@@ -169,7 +174,7 @@ export default function App() {
         </Switch>
 
         <Footer />
-        {activeModal === 'create' && 
+        {activeModal === 'create' &&
           <AddItemModal
             onOverlayClick={handleOverlay}
             onClose={closePopup}
@@ -177,13 +182,13 @@ export default function App() {
             isLoading={isLoading}
           />
         }
-        {activeModal === 'preview' && 
-          <ItemModal 
-            item={selectedCard} 
-            onClose={closePopup} 
+        {activeModal === 'preview' &&
+          <ItemModal
+            item={selectedCard}
+            onClose={closePopup}
             onDelete={deleteItem}
             onOverlayClick={handleOverlay}
-            isLoading={isLoading} 
+            isLoading={isLoading}
           />
         }
       </div>

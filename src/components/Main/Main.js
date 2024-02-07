@@ -4,8 +4,8 @@ import WeatherCard from '../WeatherCard/WeatherCard.js';
 import { CurrentTempUnitContext } from '../../contexts/CurrentTemperatureUnitContext.js';
 import './Main.css';
 
-export default function Main({time, weather, temperature, clothingItems, createCards}){
-  const {isTempUnitC} = useContext(CurrentTempUnitContext); 
+export default function Main({ time, weather, temperature, clothingItems, createCards }) {
+  const { isTempUnitC } = useContext(CurrentTempUnitContext);
   const weatherType = useMemo(() => {
     if (temperature.farenheit > 85) {
       return 'hot';
@@ -22,11 +22,11 @@ export default function Main({time, weather, temperature, clothingItems, createC
 
   return (
     <main className='main'>
-      <WeatherCard time={time}  weather={weather} temperature={temperature}/>
+      <WeatherCard time={time} weather={weather} temperature={temperature} />
       <p className='main__forecast'>Today is {
-        isTempUnitC 
-        ? `${temperature.celsius}° C`
-        : `${temperature.farenheit}° F`
+        isTempUnitC
+          ? `${temperature.celsius}° C`
+          : `${temperature.farenheit}° F`
       } / You may want to wear:</p>
       {createCards(filteredClothingItems, 'main')}
       {/* {createClothingCards(filteredClothingItems, onCardSelection)} */}
