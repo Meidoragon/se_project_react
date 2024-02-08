@@ -35,7 +35,7 @@ export default function App() {
   const [userToken, setUserToken] = useState('');
   const [user, setUser] = useState({});
   const [isDay, setIsDay] = useState('true');
-  const [activeModal, setActiveModal] = useState('register');
+  const [activeModal, setActiveModal] = useState('');
   const [selectedCard, setSelectedCard] = useState({});
   const [temperature, setTemperature] = useState({
     kelvin: 0,
@@ -123,6 +123,14 @@ export default function App() {
     }).catch(handleApiError).finally(() => {
       setIsLoading(false);
     })
+  }
+
+  function openLogInForm() {
+    setActiveModal('login');
+  }
+
+  function openSignUpForm() {
+    setActiveModal('register');
   }
 
   function deleteItem() {
@@ -220,9 +228,8 @@ export default function App() {
         <div className='page'>
           <Header
             locationName={location}
-            userName={defaultUserName}
-            avatar={defaultAvatar}
             openGarmentForm={openGarmentForm}
+            authFunctions={{ openSignUpForm, openLogInForm }}
           />
           <Switch>
             <ProtectedRoute path='/profile'>
