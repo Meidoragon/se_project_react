@@ -1,9 +1,18 @@
-# WTWR (What to Wear?)
+# WTWR (What to Wear?): Front End
+[Link to back end](https://github.com/Meidoragon/se_project_express)
 
-## About the project
+## Overview
+ * Intro
+ * Technologies Used
+ * Future plans
 
-The idea of the application is pretty simple - we make a call to an API, which then responds with the daily weather forecast. We collect the weather data, process it, and then based on the forecast, we recommend suitable clothing to the user.
+## Intro
+  This is the front end portion of WTWR, a web app designed to suggest clothing of to wear based off of the weather.
 
-## Links
+## Technologies Used
+  * Component based rendering, and state management with React
+  * Route management with React Router
 
-- [Figma Design](https://www.figma.com/file/DTojSwldenF9UPKQZd6RRb/Sprint-10%3A-WTWR)
+## Future Plans
+  * Implement user-defined locations from which to pull weather data -AND-OR- use geocoding to get the user's current location, and use that.
+  * Find a way to de-stringify some of the things that are more akin to enums (primarily the weather codes and the ActiveModal)
