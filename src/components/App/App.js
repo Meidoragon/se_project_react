@@ -31,10 +31,10 @@ export default function App() {
   const defaultUserName = `The "Zero Degree Longitude Club" President`;
   //const [userName, setUsername] = useState(`The "Zero Degree Longitude Club" President`); 
   //const [avatar, setAvatar] = useState('./url/to/image.bmp');
-  const [isLoggedIn, setIsLoggedIn] = useState('false');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userToken, setUserToken] = useState('');
   const [user, setUser] = useState({});
-  const [isDay, setIsDay] = useState('true');
+  const [isDay, setIsDay] = useState(true);
   const [activeModal, setActiveModal] = useState('');
   const [selectedCard, setSelectedCard] = useState({});
   const [temperature, setTemperature] = useState({
@@ -111,8 +111,8 @@ export default function App() {
     setCurrentTempUnit(!isTempUnitC);
   }
 
-  function handleUserLogin(userInfo) {
-    setUser(userInfo);
+  function handleLogIn() {
+    setIsLoggedIn(true);
   }
 
   function addItem(item) {
@@ -191,9 +191,9 @@ export default function App() {
     if (token) {
       getCurrentUser(token)
         .then((user) => {
-          console.log(user);
-          setUser(user);
+          setUser(user.data);
           setUserToken(token);
+          handleLogIn();
         })
         .catch(handleApiError);
     }
@@ -219,7 +219,8 @@ export default function App() {
       isLoggedIn: isLoggedIn,
       user: user,
       userToken: userToken,
-      updateUser: handleUserLogin,
+      updateUser: setUser,
+      updateIsLoggedIn: handleLogIn,
     }}>
       <CurrentTempUnitContext.Provider value={{
         isTempUnitC: isTempUnitC,
@@ -232,7 +233,7 @@ export default function App() {
             authFunctions={{ openSignUpForm, openLogInForm }}
           />
           <Switch>
-            <ProtectedRoute path='/profile'>
+            <ProtectedRoute path='/profile' loggedIn={isLoggedIn}>
               <Profile
                 createClothingCards={createClothingCards}
                 openNewGarmentForm={openGarmentForm}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useContext } from 'react';
 import './Header.css';
 import headerLogo from '../../images/logo.svg';
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
@@ -7,7 +8,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 export default function Header({ locationName, openGarmentForm, authFunctions }) {
   const { openSignUpForm, openLogInForm } = authFunctions;
-  const { isLoggedIn, user } = CurrentUserContext;
+  const { isLoggedIn, user } = useContext(CurrentUserContext);
   const currentDate = new Date().toLocaleString('default', { month: 'long', day: 'numeric' });
   return (
     <header className='header'>

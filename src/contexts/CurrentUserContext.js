@@ -4,4 +4,5 @@ export const CurrentUserContext = React.createContext({
   userToken: '',
   user: {},
   updateUser: () => { },
+  updateIsLoggedIn: () => { },
 });
