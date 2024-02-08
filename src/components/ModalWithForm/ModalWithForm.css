@@ -1,21 +1,21 @@
-.form-modal__close-button{
+.form-modal__close-button {
   position: absolute;
   top: 20px;
   right: 28px;
   z-index: 1;
 }
 
-.form-modal__title{
+.form-modal__title {
   margin: 0 0 24px;
   font-size: 16px;
 }
 
-.form-modal__input-label{
+.form-modal__input-label {
   margin: 0 0 8px;
   font-size: 16px;
 }
 
-.form-modal__input{
+.form-modal__input {
   width: 100%;
   margin: 0 0 24px;
   padding: 0 0 4px;
@@ -24,8 +24,8 @@
   font-size: 16px;
 }
 
-.form-modal__radio-buttons{
-  display:flex;
+.form-modal__radio-buttons {
+  display: flex;
   flex-direction: column;
   gap: 8px;
   margin: 0;
@@ -40,37 +40,65 @@
   cursor: pointer;
 } */
 
-.form-modal__radio-button-label{
-  color: #00000080; /* 50% opacity; */
+.form-modal__radio-button-label {
+  color: #00000080;
+  /* 50% opacity; */
   font-size: 16px;
   cursor: pointer;
   margin: 0 0 0 8px;
 }
 
-.form-modal__radio-button:checked+.form-modal__radio-button-label{
-  color: #000000ff; /*100% opacity*/
+.form-modal__radio-button:checked+.form-modal__radio-button-label {
+  color: #000000ff;
+  /*100% opacity*/
 }
 
-.form-modal__submit-button{
-  margin: 24px 0 0;
+.form-modal__button-container {
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.form-modal__submit-button {
   border: none;
   border-radius: 4px;
-  width: 124px;
-  height: 36px;
+  /* width: 124px; */
+  /* height: 36px; */
   padding: 8px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000000FF; /*Black with 100% opacity*/
+  background: #000000FF;
+  /*Black with 100% opacity*/
   color: #fff;
   font-size: 16px;
 }
 
-.form-modal__submit-button:hover:not(.inactive){
-  background: #0000009A;  /*Black with 60% opacity*/
+.form-modal__alternate-button-separator {
+  color: #00000080;
+  margin: 0 0 0 8px;
+  padding: 0;
+}
+
+.form-modal__alternate-button {
+  margin: auto 0;
+  border: none;
+  background-color: #fff0;
+  color: #00000080;
+}
+
+.form-modal__alternate-button:hover {
   cursor: pointer;
 }
 
-.inactive{
-  background: #0000004C; /*Black with 30% opactity*/
+.form-modal__submit-button:hover:not(.inactive) {
+  background: #0000009A;
+  /*Black with 60% opacity*/
+  cursor: pointer;
+}
+
+.inactive {
+  background: #0000004C;
+  /*Black with 30% opactity*/
 }
