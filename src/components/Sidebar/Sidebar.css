@@ -1,4 +1,4 @@
-.sidebar{
+.sidebar {
   padding: 0;
   margin: 6px 0 0;
   /* color: red; */
@@ -8,20 +8,14 @@
   width: 25%;
 }
 
-.sidebar__user-info{
-  display:flex;
+.sidebar__user-info {
+  display: flex;
   gap: 15px;
   max-height: 40px;
-  overflow:visible;
+  overflow: visible;
 }
 
-.sidebar__user-avatar{
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.sidebar__user-name{
+.sidebar__user-name {
   text-align: left;
   margin: auto 0;
   /* display: inline-block; */
