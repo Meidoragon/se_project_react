@@ -5,6 +5,7 @@ import './Header.css';
 import headerLogo from '../../images/logo.svg';
 import ToggleSwitch from '../ToggleSwitch/ToggleSwitch';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import Avatar from '../Avatar/Avatar';
 
 export default function Header({ locationName, openGarmentForm, authFunctions }) {
   const { openSignUpForm, openLogInForm } = authFunctions;
@@ -26,7 +27,7 @@ export default function Header({ locationName, openGarmentForm, authFunctions })
               <button className='header__button add-clothes-button' type='text' onClick={openGarmentForm}>+Add clothes</button>
               <NavLink to='/profile' className='header__nav-item header__user-info'>
                 <p className='header__username'>{user.name}</p>
-                <img className='header__avatar' src={user.avatar} alt='user avatar' />
+                <Avatar user={user} additionalClasses='header__avatar' />
               </NavLink>
             </> :
             <>

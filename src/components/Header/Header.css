@@ -1,4 +1,4 @@
-.header{
+.header {
   margin: 0;
   display: flex;
   justify-content: space-between;
@@ -6,28 +6,28 @@
   min-height: 60px;
 }
 
-.header__container{
+.header__container {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-.header__nav-item{
+.header__nav-item {
   color: #000;
   text-decoration: none;
 }
 
-.header__logo{
+.header__logo {
   height: 40px;
   width: 89px;
   margin: 0 24px 0 0;
 }
 
-.header__date{
+.header__date {
   margin: 11px 0 5px;
 }
 
-.header__button{
+.header__button {
   padding: 0;
   margin: 8px;
   border: none;
@@ -37,20 +37,18 @@
   font-weight: 700;
 }
 
-.header__user-info{
+.header__user-info {
   display: flex;
 }
 
-.header__username{
+.header__username {
   margin: 8px 0 7px;
 }
 
-.header__avatar{
+.header__avatar {
   margin-left: 12px;
-  width: 40px;
-  height: 40px;
 }
 
-.header__button:hover{
+.header__button:hover {
   cursor: pointer;
 }
