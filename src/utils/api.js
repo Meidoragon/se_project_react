@@ -13,25 +13,61 @@ function request(url, options) {
 }
 
 export function getItems() {
-  //get items  
   return request(`${URL}/items`, {});
 }
 
-export function addItem(item) {
+export function addItem(item, token) {
   return request(`${URL}/items`, {
     method: 'POST',
     headers: {
+      authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(item),
   })
 }
 
-export function deleteItem(id) {
+export function deleteItem(id, token) {
   return request(`${URL}/items/${id}`, {
-    'method': 'DELETE',
+    method: 'DELETE',
+    headers: {
+      authorizaiton: `Bearer ${token}`,
+    }
   })
 }
+
+export function register(values) {
+  return request(`${URL}/signup`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(values)
+  })
+}
+
+export function signIn(values) {
+  return request(`${URL}/signin`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(values)
+  })
+}
+
+export function getCurrentUser(token) {
+  return request(`${URL}/users/me`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    }
+  })
+}
+
 
 export function handleApiError(response) {
   console.error(`Error: ${response.status}`);

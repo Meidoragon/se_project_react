@@ -45,7 +45,7 @@ export default function LoginModal({ isLoading, onSubmit, onOverlayClick, onClos
         <input
           className='form-modal__input'
           type='password'
-          name='name'
+          name='password'
           value={values.password}
           minLength='1'
           maxLength='30'

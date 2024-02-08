@@ -6,26 +6,32 @@ import Header from '../Header/Header.js';
 import Main from '../Main/Main.js';
 import Footer from '../Footer/Footer.js';
 import Profile from '../Profile/Profile.js';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { convertKelvinToCelsius, convertKelvinToFarenheit, defaultAPIInfo } from '../../utils/constants';
 import ItemModal from '../ItemModal/ItemModal.js';
 import { callWeatherAPI, parseResponse, parseWeatherCode } from '../../utils/WeatherAPI.js';
 import { CurrentTempUnitContext } from '../../contexts/CurrentTemperatureUnitContext';
 import AddItemModal from '../AddItemModal/AddItemModal.js'
 import ItemCard from '../ItemCard/ItemCard.js';
-import avatar from '../../images/avatar.png';
+import RegisterModal from '../RegisterModal/RegisterModal';
+import LoginModal from '../LoginModal/LoginModal';
+import defaultAvatar from '../../images/avatar.png';
 import {
   getItems,
   handleApiError,
   addItem as addItemToDB,
-  deleteItem as deleteItemFromDB
+  deleteItem as deleteItemFromDB,
+  register,
+  signIn,
+  getCurrentUser,
 } from '../../utils/api.js';
 
 export default function App() {
-  const userName = `The "Zero Degree Longitude Club" President`;
+  const defaultUserName = `The "Zero Degree Longitude Club" President`;
   //const [userName, setUsername] = useState(`The "Zero Degree Longitude Club" President`); 
   //const [avatar, setAvatar] = useState('./url/to/image.bmp');
   const [isDay, setIsDay] = useState('true');
-  const [activeModal, setActiveModal] = useState('');
+  const [activeModal, setActiveModal] = useState('login');
   const [selectedCard, setSelectedCard] = useState({});
   const [temperature, setTemperature] = useState({
     kelvin: 0,
@@ -48,6 +54,31 @@ export default function App() {
       return;
     }
     closePopup()
+  }
+
+  function handleRegistration(values) {
+    setIsLoading(true);
+    register(values)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch(handleApiError)
+      .finally(() => {
+        setIsLoading(false);
+      })
+  }
+
+  function handleSignIn(values) {
+    setIsLoading(true);
+    signIn(values)
+      .then((res) => {
+        console.log(res);
+        localStorage.setItem('jwt', res.token);
+      })
+      .catch(handleApiError)
+      .finally(() => {
+        setIsLoading(false);
+      })
   }
 
   function openCardPopup(item) {
@@ -126,6 +157,17 @@ export default function App() {
     })
   }, []);
 
+  // get user information for logged in user
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      getCurrentUser(token)
+        .then((user) => {
+          console.log(user);
+        })
+    }
+  }, [])
+
   // listen for key inputs and close modal when key is 'esc'
   useEffect(() => {
     if (!activeModal) return;
@@ -149,20 +191,20 @@ export default function App() {
       <div className='page'>
         <Header
           locationName={location}
-          userName={userName}
-          avatar={avatar}
+          userName={defaultUserName}
+          avatar={defaultAvatar}
           openGarmentForm={openGarmentForm}
         />
         <Switch>
-          <Route path='/profile'>
+          <ProtectedRoute path='/profile'>
             <Profile
               createClothingCards={createClothingCards}
               openNewGarmentForm={openGarmentForm}
               clothingItems={clothingItems}
-              avatar={avatar}
-              userName={userName}
+              avatar={defaultAvatar}
+              userName={defaultUserName}
             />
-          </Route>
+          </ProtectedRoute>
           <Route path='/'>
             <Main clothingItems={clothingItems}
               temperature={temperature}
@@ -188,6 +230,24 @@ export default function App() {
             onClose={closePopup}
             onDelete={deleteItem}
             onOverlayClick={handleOverlay}
+            isLoading={isLoading}
+          />
+        }
+        {activeModal === 'register' &&
+          <RegisterModal
+            onClose={closePopup}
+            onOverlayClick={handleOverlay}
+            onSubmit={handleRegistration}
+            setActiveModal={setActiveModal}
+            isLoading={isLoading}
+          />
+        }
+        {activeModal === 'login' &&
+          <LoginModal
+            onClose={closePopup}
+            onOverlayClick={handleOverlay}
+            onSubmit={handleSignIn}
+            setActiveModal={setActiveModal}
             isLoading={isLoading}
           />
         }

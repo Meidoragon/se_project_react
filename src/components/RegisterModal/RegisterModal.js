@@ -2,7 +2,7 @@ import { useForm } from '../../hooks/useForm.js'
 import ModalWithForm from '../ModalWithForm/ModalWithForm.js';
 
 export default function RegisterModal({ isLoading, onSubmit, onOverlayClick, onClose, setActiveModal }) {
-  const { values, handleChange } = useForm({ 'email': '', 'password': '', 'name': '', 'avatarURL': '' });
+  const { values, handleChange } = useForm({ 'email': '', 'password': '', 'name': '', 'avatar': '' });
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -71,10 +71,9 @@ export default function RegisterModal({ isLoading, onSubmit, onOverlayClick, onC
         <input
           className='form-modal__input'
           type='text'
-          name='avatarURL'
-          value={values.avatarURL}
+          name='avatar'
+          value={values.avatar}
           minLength='1'
-          maxLength='30'
           placeholder='Avatar URL'
           onChange={handleChange}
         />

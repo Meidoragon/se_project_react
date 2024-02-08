@@ -2,10 +2,8 @@ import './ModalWithForm.css';
 import { useState, useEffect } from 'react';
 import Modal from '../Modal/Modal.js';
 
-// `alternateButton` is either an object or a bool? don't let the developers of strongly-typed languages know.
-// of course they already know that javascript does some kind of wild stuff in that regard.
 export default function ModalWithForm(props) {
-  // kind of surprised this just works(tm)
+  // kind of surprised this just werks(tm)
   const {
     children,
     name,
@@ -14,6 +12,7 @@ export default function ModalWithForm(props) {
     onOverlayClick,
     onSubmit,
     isLoading,
+    // strongly-typed language devs reeling from this one.
     alternateButton = false,
     buttonText = 'Submit'
   } = props;
