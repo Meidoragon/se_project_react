@@ -11,6 +11,7 @@ import { convertKelvinToCelsius, convertKelvinToFarenheit, defaultAPIInfo } from
 import ItemModal from '../ItemModal/ItemModal.js';
 import { callWeatherAPI, parseResponse, parseWeatherCode } from '../../utils/WeatherAPI.js';
 import { CurrentTempUnitContext } from '../../contexts/CurrentTemperatureUnitContext';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import AddItemModal from '../AddItemModal/AddItemModal.js'
 import ItemCard from '../ItemCard/ItemCard.js';
 import RegisterModal from '../RegisterModal/RegisterModal';
@@ -30,8 +31,11 @@ export default function App() {
   const defaultUserName = `The "Zero Degree Longitude Club" President`;
   //const [userName, setUsername] = useState(`The "Zero Degree Longitude Club" President`); 
   //const [avatar, setAvatar] = useState('./url/to/image.bmp');
+  const [isLoggedIn, setIsLoggedIn] = useState('false');
+  const [userToken, setUserToken] = useState('');
+  const [user, setUser] = useState({});
   const [isDay, setIsDay] = useState('true');
-  const [activeModal, setActiveModal] = useState('login');
+  const [activeModal, setActiveModal] = useState('register');
   const [selectedCard, setSelectedCard] = useState({});
   const [temperature, setTemperature] = useState({
     kelvin: 0,
@@ -56,11 +60,27 @@ export default function App() {
     closePopup()
   }
 
+  function callSignIn(values) {
+    signIn(values)
+      .then((res) => {
+        console.log(res);
+        localStorage.setItem('jwt', res.token);
+        setIsLoggedIn('true');
+      })
+
+  }
+
   function handleRegistration(values) {
     setIsLoading(true);
     register(values)
       .then((res) => {
         console.log(res);
+        const loginInfo = {
+          email: values.email,
+          password: values.password,
+        }
+        callSignIn(loginInfo)
+        // .catch(handleApiError)
       })
       .catch(handleApiError)
       .finally(() => {
@@ -68,13 +88,9 @@ export default function App() {
       })
   }
 
-  function handleSignIn(values) {
+  function handleSignInSubmission(values) {
     setIsLoading(true);
-    signIn(values)
-      .then((res) => {
-        console.log(res);
-        localStorage.setItem('jwt', res.token);
-      })
+    callSignIn(values)
       .catch(handleApiError)
       .finally(() => {
         setIsLoading(false);
@@ -93,6 +109,10 @@ export default function App() {
 
   function handleTempUnitSwitch() {
     setCurrentTempUnit(!isTempUnitC);
+  }
+
+  function handleUserLogin(userInfo) {
+    setUser(userInfo);
   }
 
   function addItem(item) {
@@ -164,7 +184,10 @@ export default function App() {
       getCurrentUser(token)
         .then((user) => {
           console.log(user);
+          setUser(user);
+          setUserToken(token);
         })
+        .catch(handleApiError);
     }
   }, [])
 
@@ -184,74 +207,81 @@ export default function App() {
 
 
   return (
-    <CurrentTempUnitContext.Provider value={{
-      isTempUnitC: isTempUnitC,
-      handleTempUnitSwitch
+    <CurrentUserContext.Provider value={{
+      isLoggedIn: isLoggedIn,
+      user: user,
+      userToken: userToken,
+      updateUser: handleUserLogin,
     }}>
-      <div className='page'>
-        <Header
-          locationName={location}
-          userName={defaultUserName}
-          avatar={defaultAvatar}
-          openGarmentForm={openGarmentForm}
-        />
-        <Switch>
-          <ProtectedRoute path='/profile'>
-            <Profile
-              createClothingCards={createClothingCards}
-              openNewGarmentForm={openGarmentForm}
-              clothingItems={clothingItems}
-              avatar={defaultAvatar}
-              userName={defaultUserName}
-            />
-          </ProtectedRoute>
-          <Route path='/'>
-            <Main clothingItems={clothingItems}
-              temperature={temperature}
-              time={isDay ? 'day' : 'night'}
-              weather={weather}
-              createCards={createClothingCards}
-            />
-          </Route>
-        </Switch>
+      <CurrentTempUnitContext.Provider value={{
+        isTempUnitC: isTempUnitC,
+        handleTempUnitSwitch
+      }}>
+        <div className='page'>
+          <Header
+            locationName={location}
+            userName={defaultUserName}
+            avatar={defaultAvatar}
+            openGarmentForm={openGarmentForm}
+          />
+          <Switch>
+            <ProtectedRoute path='/profile'>
+              <Profile
+                createClothingCards={createClothingCards}
+                openNewGarmentForm={openGarmentForm}
+                clothingItems={clothingItems}
+                avatar={defaultAvatar}
+                userName={defaultUserName}
+              />
+            </ProtectedRoute>
+            <Route path='/'>
+              <Main clothingItems={clothingItems}
+                temperature={temperature}
+                time={isDay ? 'day' : 'night'}
+                weather={weather}
+                createCards={createClothingCards}
+              />
+            </Route>
+          </Switch>
 
-        <Footer />
-        {activeModal === 'create' &&
-          <AddItemModal
-            onOverlayClick={handleOverlay}
-            onClose={closePopup}
-            onSubmit={addItem}
-            isLoading={isLoading}
-          />
-        }
-        {activeModal === 'preview' &&
-          <ItemModal
-            item={selectedCard}
-            onClose={closePopup}
-            onDelete={deleteItem}
-            onOverlayClick={handleOverlay}
-            isLoading={isLoading}
-          />
-        }
-        {activeModal === 'register' &&
-          <RegisterModal
-            onClose={closePopup}
-            onOverlayClick={handleOverlay}
-            onSubmit={handleRegistration}
-            setActiveModal={setActiveModal}
-            isLoading={isLoading}
-          />
-        }
-        {activeModal === 'login' &&
-          <LoginModal
-            onClose={closePopup}
-            onOverlayClick={handleOverlay}
-            onSubmit={handleSignIn}
-            setActiveModal={setActiveModal}
-            isLoading={isLoading}
-          />
-        }
-      </div>
-    </CurrentTempUnitContext.Provider>
+          <Footer />
+          {activeModal === 'create' &&
+            <AddItemModal
+              onOverlayClick={handleOverlay}
+              onClose={closePopup}
+              onSubmit={addItem}
+              isLoading={isLoading}
+            />
+          }
+          {activeModal === 'preview' &&
+            <ItemModal
+              item={selectedCard}
+              onClose={closePopup}
+              onDelete={deleteItem}
+              onOverlayClick={handleOverlay}
+              isLoading={isLoading}
+            />
+          }
+          {activeModal === 'register' &&
+            <RegisterModal
+              onClose={closePopup}
+              onOverlayClick={handleOverlay}
+              onSubmit={handleRegistration}
+              setActiveModal={setActiveModal}
+              isLoading={isLoading}
+            />
+          }
+          {activeModal === 'login' &&
+            <LoginModal
+              onClose={closePopup}
+              onOverlayClick={handleOverlay}
+              onSubmit={handleSignInSubmission}
+              setActiveModal={setActiveModal}
+              isLoading={isLoading}
+            />
+          }
+        </div>
+      </CurrentTempUnitContext.Provider>
+    </CurrentUserContext.Provider>
   );
 }
