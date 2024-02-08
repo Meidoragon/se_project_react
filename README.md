@@ -10,7 +10,7 @@
   This is the front end portion of WTWR, a web app designed to suggest clothing of to wear based off of the weather.
 
 ## Technologies Used
-  * Component based rendering, and state management with React
+  * Component based rendering and state management with React
   * Route management with React Router
 
 ## Future Plans
