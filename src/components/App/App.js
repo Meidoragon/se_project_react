@@ -16,6 +16,7 @@ import AddItemModal from '../AddItemModal/AddItemModal.js'
 import ItemCard from '../ItemCard/ItemCard.js';
 import RegisterModal from '../RegisterModal/RegisterModal';
 import LoginModal from '../LoginModal/LoginModal';
+import EditProfileModal from '../EditProfileModal/EditProfileModal';
 import defaultAvatar from '../../images/avatar.png';
 import {
   getItems,
@@ -35,7 +36,7 @@ export default function App() {
   const [userToken, setUserToken] = useState('');
   const [user, setUser] = useState({});
   const [isDay, setIsDay] = useState(true);
-  const [activeModal, setActiveModal] = useState('');
+  const [activeModal, setActiveModal] = useState('update-profile');
   const [selectedCard, setSelectedCard] = useState({});
   const [temperature, setTemperature] = useState({
     kelvin: 0,
@@ -285,6 +286,14 @@ export default function App() {
               onOverlayClick={handleOverlay}
               onSubmit={handleSignInSubmission}
               setActiveModal={setActiveModal}
+              isLoading={isLoading}
+            />
+          }
+          {activeModal === 'update-profile' &&
+            <EditProfileModal
+              onClose={closePopup}
+              onOverlayClick={handleOverlay}
+              onSubmit={() => { console.log("profile update submitted") }}
               isLoading={isLoading}
             />
           }
