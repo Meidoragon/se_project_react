@@ -205,18 +205,18 @@ export default function App() {
     });
   }
 
-  function createClothingCards(itemList, parentComponentName) {
-    return (
-      <ul className={`${parentComponentName}__clothing-cards`}>
-        {itemList.map(card => {
-          return (
-            <li key={card._id} className={`${parentComponentName}__clothing-card`}>
-              <ItemCard card={card} onCardSelection={openCardPopup} toggleLikeStatus={toggleLikeStatus} />
-            </li>)
-        })}
-      </ul>
-    )
-  }
+  // function createClothingCards(itemList, parentComponentName) {
+  //   return (
+  //     <ul className={`${parentComponentName}__clothing-cards`}>
+  //       {itemList.map(card => {
+  //         return (
+  //           <li key={card._id} className={`${parentComponentName}__clothing-card`}>
+  //             <ItemCard card={card} onCardSelection={openCardPopup} toggleLikeStatus={toggleLikeStatus} />
+  //           </li>)
+  //       })}
+  //     </ul>
+  //   )
+  // }
 
   // get clothing items 
   useEffect(() => {
@@ -290,19 +290,24 @@ export default function App() {
           <Switch>
             <ProtectedRoute path='/profile' loggedIn={isLoggedIn}>
               <Profile
-                createClothingCards={createClothingCards}
+                // createClothingCards={createClothingCards}
                 openNewGarmentForm={openGarmentForm}
                 openProfileForm={openProfileForm}
                 handleLogout={handleLogout}
                 clothingItems={clothingItems}
+                openCardPopup={openCardPopup}
+                toggleLikeStatus={toggleLikeStatus}
               />
             </ProtectedRoute>
             <Route path='/'>
-              <Main clothingItems={clothingItems}
+              <Main
+                clothingItems={clothingItems}
                 temperature={temperature}
                 time={isDay ? 'day' : 'night'}
                 weather={weather}
-                createCards={createClothingCards}
+                openCardPopup={openCardPopup}
+                toggleLikeStatus={toggleLikeStatus}
+              // createCards={createClothingCards}
               />
             </Route>
           </Switch>
