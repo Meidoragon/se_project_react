@@ -17,6 +17,8 @@ export function getItems() {
 }
 
 export function addItem(item, token) {
+  console.log(item);
+  console.log(token);
   return request(`${URL}/items`, {
     method: 'POST',
     headers: {
@@ -69,6 +71,6 @@ export function getCurrentUser(token) {
 }
 
 
-export function handleApiError(response) {
-  console.error(`Error: ${response.status}`);
+export function handleApiError(res) {
+  console.error(`Error: ${res.status}`);
 }

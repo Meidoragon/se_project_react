@@ -1,9 +1,12 @@
 import './ItemModal.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Modal from '../Modal/Modal.js';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 export default function ItemModal({ item, isLoading, onClose, onDelete, onOverlayClick, isHorizontal = false }) {
   const [deleteIsActive, setButtonState] = useState('true');
+  const { user: currentUser } = useContext(CurrentUserContext);
+  console.log(currentUser);
   useEffect(() => {
     setButtonState(!isLoading);
   }, [isLoading])
