@@ -16,7 +16,7 @@ export function getItems() {
   return request(`${URL}/items`, {});
 }
 
-export function addItem(item, token) {
+export function addItem(token, item) {
   return request(`${URL}/items`, {
     method: 'POST',
     headers: {
@@ -27,11 +27,11 @@ export function addItem(item, token) {
   })
 }
 
-export function deleteItem(id, token) {
+export function deleteItem(token, id) {
   return request(`${URL}/items/${id}`, {
     method: 'DELETE',
     headers: {
-      authorizaiton: `Bearer ${token}`,
+      authorization: `Bearer ${token}`,
     }
   })
 }
@@ -77,6 +77,26 @@ export function updateCurrentUser(token, newInfo) {
       authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(newInfo)
+  })
+}
+
+export function addCardLike(token, id) {
+  return request(`${URL}/items/${id}/likes`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+  })
+}
+
+export function removeCardLike(token, id) {
+  return request(`${URL}/items/${id}/likes`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      authorization: `Bearer ${token}`,
+    },
   })
 }
 

@@ -26,6 +26,8 @@ import {
   signIn,
   getCurrentUser,
   updateCurrentUser,
+  addCardLike,
+  removeCardLike,
 } from '../../utils/api.js';
 
 export default function App() {
@@ -87,7 +89,6 @@ export default function App() {
     setIsLoading(true);
     register(values)
       .then((res) => {
-        console.log(res);
         const loginInfo = {
           email: values.email,
           password: values.password,
@@ -96,6 +97,7 @@ export default function App() {
       })
       .catch(handleApiError)
       .finally(() => {
+        closePopup();
         setIsLoading(false);
       })
   }
@@ -124,6 +126,18 @@ export default function App() {
       })
     closePopup();
     setIsLoading(false);
+  }
+
+  function toggleLikeStatus(card, isLiked) {
+    isLiked ?
+      removeCardLike(userToken, card._id)
+        .then((res) => {
+          return res;
+        }) :
+      addCardLike(userToken, card._id)
+        .then((res) => {
+          return res;
+        })
   }
 
   function openCardPopup(item) {
@@ -178,7 +192,7 @@ export default function App() {
         {itemList.map(card => {
           return (
             <li key={card._id} className={`${parentComponentName}__clothing-card`}>
-              <ItemCard card={card} onCardSelection={openCardPopup} />
+              <ItemCard card={card} onCardSelection={openCardPopup} toggleLikeStatus={toggleLikeStatus} />
             </li>)
         })}
       </ul>
@@ -189,8 +203,8 @@ export default function App() {
   useEffect(() => {
     getItems().then((response) => {
       setClothingItems(response)
-    }).catch((response) => {
-      console.error(`Error: ${response.status}`)
+    }).catch((err) => {
+      handleApiError(err)
     })
   }, [])
 

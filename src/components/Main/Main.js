@@ -19,8 +19,7 @@ export default function Main({ time, weather, temperature, clothingItems, create
   }, [temperature.farenheit])
 
   const filteredClothingItems = clothingItems.filter((item) => {
-    const showItem = (item.weather.toLowerCase() === weatherType &&
-      item.owner === currentUser._id)
+    const showItem = item.weather.toLowerCase() === weatherType
     return showItem;
   })
 

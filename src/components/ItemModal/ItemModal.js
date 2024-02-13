@@ -15,7 +15,7 @@ export default function ItemModal({ item, isLoading, onClose, onDelete, onOverla
   let deleteButtonClassName = ['item-modal__delete-button button',
     !deleteIsActive ? ' delete-inactive' : '',
     !isOwned ? ' button-hidden' : ''
-  ].join();
+  ].join('');
 
   const verticalLayout = (
     <Modal modalType='item' onOverlayClick={onOverlayClick} onClose={onClose}>
