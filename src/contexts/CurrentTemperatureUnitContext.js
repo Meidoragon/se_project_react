@@ -1,5 +1,7 @@
 import React from "react";
-export const CurrentTempUnitContext = React.createContext({
-  isTempUnitC: false,
-  handleTempUnitSwitch: () => { },
+export const CurrentTemperatureUnitContext = React.createContext({
+  currentTemperatureUnit: 'celsius',
+  handleToggleSwitchChange: () => { },
+  // isTempUnitC: false,
+  // handleTempUnitSwitch: () => { },
 });
