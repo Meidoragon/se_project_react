@@ -10,7 +10,7 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { convertKelvinToCelsius, convertKelvinToFarenheit, defaultAPIInfo } from '../../utils/constants';
 import ItemModal from '../ItemModal/ItemModal.js';
 import { callWeatherAPI, parseResponse, parseWeatherCode } from '../../utils/WeatherAPI.js';
-import { CurrentTempUnitContext } from '../../contexts/CurrentTemperatureUnitContext';
+import { CurrentTemperatureUnitContext } from '../../contexts/CurrentTemperatureUnitContext';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import AddItemModal from '../AddItemModal/AddItemModal.js'
 import ItemCard from '../ItemCard/ItemCard.js';
@@ -268,7 +268,7 @@ export default function App() {
       user: user,
       userToken: userToken,
     }}>
-      <CurrentTempUnitContext.Provider value={{
+      <CurrentTemperatureUnitContext.Provider value={{
         isTempUnitC: isTempUnitC,
         handleTempUnitSwitch
       }}>
