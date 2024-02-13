@@ -1,6 +1,6 @@
 import { useForm } from '../../hooks/useForm.js'
 import ModalWithForm from '../ModalWithForm/ModalWithForm.js';
-
+// TODO: set profile modal submit button to be inactive until at least one of the fields is valid and none are invalid
 export default function EditProfileModal({ isLoading, onSubmit, onOverlayClick, onClose }) {
   const { values, handleChange } = useForm({ 'name': '', 'link': '' });
 

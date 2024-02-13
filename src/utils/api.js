@@ -17,8 +17,6 @@ export function getItems() {
 }
 
 export function addItem(item, token) {
-  console.log(item);
-  console.log(token);
   return request(`${URL}/items`, {
     method: 'POST',
     headers: {
@@ -70,6 +68,17 @@ export function getCurrentUser(token) {
   })
 }
 
+export function updateCurrentUser(token, newInfo) {
+  return request(`${URL}/users/me`, {
+    method: 'PATCH',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(newInfo)
+  })
+}
 
 export function handleApiError(res) {
   console.error(`Error: ${res.status}`);

@@ -1,5 +1,8 @@
 .sidebar {
+  display: flex;
+  flex-direction: column;
   padding: 0;
+  align-items: start;
   margin: 6px 0 0;
   /* color: red; */
   /* background-color: blue; */
@@ -9,6 +12,7 @@
 }
 
 .sidebar__user-info {
+  margin: 0 0 16px;
   display: flex;
   gap: 15px;
   max-height: 40px;
@@ -22,4 +26,18 @@
   /* max-width: 345px; */
   /* overflow: hidden; */
   /* text-overflow: ellipsis; */
+}
+
+.sidebar__button {
+  padding: 0;
+  margin: 8px 0 0;
+  border: none;
+  background-color: #fff0;
+  color: #000;
+  /* white-space: nowrap; */
+  font-weight: 700;
+}
+
+.sidebar__button:hover {
+  cursor: pointer;
 }

@@ -17,7 +17,6 @@ import ItemCard from '../ItemCard/ItemCard.js';
 import RegisterModal from '../RegisterModal/RegisterModal';
 import LoginModal from '../LoginModal/LoginModal';
 import EditProfileModal from '../EditProfileModal/EditProfileModal';
-import defaultAvatar from '../../images/avatar.png';
 import {
   getItems,
   handleApiError,
@@ -26,15 +25,15 @@ import {
   register,
   signIn,
   getCurrentUser,
+  updateCurrentUser,
 } from '../../utils/api.js';
 
 export default function App() {
-  const defaultUserName = `The "Zero Degree Longitude Club" President`;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userToken, setUserToken] = useState('');
   const [user, setUser] = useState({});
   const [isDay, setIsDay] = useState(true);
-  const [activeModal, setActiveModal] = useState('update-profile');
+  const [activeModal, setActiveModal] = useState();
   const [selectedCard, setSelectedCard] = useState({});
   const [temperature, setTemperature] = useState({
     kelvin: 0,
@@ -69,6 +68,13 @@ export default function App() {
       .catch(handleApiError);
   }
 
+  function handleLogout() {
+    setIsLoggedIn(false);
+    localStorage.setItem('jwt', '');
+    setUserToken('');
+    setUser({});
+  }
+
   function logIn(loginInfo) {
     signIn(loginInfo)
       .then((res) => {
@@ -101,6 +107,25 @@ export default function App() {
     setIsLoading(false);
   }
 
+  function handleProfileUpdate(values) {
+    setIsLoading(true);
+    const profileInfo = {};
+    for (const key of Object.keys(values)) {
+      if (values[key]) {
+        profileInfo[key] = values[key];
+      }
+    }
+    updateCurrentUser(userToken, profileInfo)
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => {
+        handleApiError(err);
+      })
+    closePopup();
+    setIsLoading(false);
+  }
+
   function openCardPopup(item) {
     setSelectedCard(item)
     setActiveModal('preview');
@@ -117,9 +142,9 @@ export default function App() {
 
   function addItem(item) {
     setIsLoading(true);
-    return addItemToDB(item, userToken).then((response) => {
+    return addItemToDB(userToken, item).then((response) => {
       closePopup();
-      setClothingItems([response, ...clothingItems]);
+      setClothingItems([response.data, ...clothingItems]);
     }).catch(handleApiError).finally(() => {
       setIsLoading(false);
     })
@@ -133,9 +158,13 @@ export default function App() {
     setActiveModal('register');
   }
 
+  function openProfileForm() {
+    setActiveModal('update-profile');
+  }
+
   function deleteItem() {
     setIsLoading(true)
-    deleteItemFromDB(selectedCard._id).then(() => {
+    deleteItemFromDB(userToken, selectedCard._id).then(() => {
       setClothingItems(clothingItems.filter((item) => item._id !== selectedCard._id))
       closePopup();
     }).catch(handleApiError).finally(() => {
@@ -207,10 +236,6 @@ export default function App() {
     };
   }, [activeModal])
 
-  // useEffect(() => {
-  //   console.log(userContext);
-  // }, [userContext, userContext.isLoggedIn, userContext.userToken])
-
   return (
     <CurrentUserContext.Provider value={{
       isLoggedIn: isLoggedIn,
@@ -232,9 +257,9 @@ export default function App() {
               <Profile
                 createClothingCards={createClothingCards}
                 openNewGarmentForm={openGarmentForm}
+                openProfileForm={openProfileForm}
+                handleLogout={handleLogout}
                 clothingItems={clothingItems}
-                avatar={defaultAvatar}
-                userName={defaultUserName}
               />
             </ProtectedRoute>
             <Route path='/'>
@@ -287,7 +312,7 @@ export default function App() {
             <EditProfileModal
               onClose={closePopup}
               onOverlayClick={handleOverlay}
-              onSubmit={() => { console.log("profile update submitted") }}
+              onSubmit={handleProfileUpdate}
               isLoading={isLoading}
             />
           }
