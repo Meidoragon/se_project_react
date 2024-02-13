@@ -46,10 +46,10 @@ export default function App() {
   });
   const [weather, setWeather] = useState('clear');
   const [location, setLocation] = useState('');
-  const [isTempUnitC, setCurrentTempUnit] = useState(false);
+  // const [isTempUnitC, setCurrentTempUnit] = useState(false);
+  const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState('celsius')
   const [clothingItems, setClothingItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  //const [weatherData, setWeatherData] = useState({}); 
 
   function openGarmentForm() {
     setActiveModal('create');
@@ -162,8 +162,15 @@ export default function App() {
     setSelectedCard({});
   }
 
-  function handleTempUnitSwitch() {
-    setCurrentTempUnit(!isTempUnitC);
+  // function handleTempUnitSwitch() {
+  //   setCurrentTempUnit(!isTempUnitC);
+  // }
+  function handleToggleSwitchChange() {
+    if (currentTemperatureUnit === 'celsius') {
+      setCurrentTemperatureUnit('farenheit')
+    } else {
+      setCurrentTemperatureUnit('celsius')
+    }
   }
 
   function addItem(item) {
@@ -269,8 +276,10 @@ export default function App() {
       userToken: userToken,
     }}>
       <CurrentTemperatureUnitContext.Provider value={{
-        isTempUnitC: isTempUnitC,
-        handleTempUnitSwitch
+        currentTemperatureUnit,
+        handleToggleSwitchChange
+        // isTempUnitC: isTempUnitC,
+        // handleTempUnitSwitch
       }}>
         <div className='page'>
           <Header

@@ -2,12 +2,10 @@
 import { useMemo, useContext } from 'react';
 import WeatherCard from '../WeatherCard/WeatherCard.js';
 import { CurrentTemperatureUnitContext } from '../../contexts/CurrentTemperatureUnitContext.js';
-// import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import './Main.css';
 
 export default function Main({ time, weather, temperature, clothingItems, createCards }) {
-  const { isTempUnitC } = useContext(CurrentTemperatureUnitContext);
-  // const { user: currentUser } = useContext(CurrentUserContext);
+  const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext);
   const weatherType = useMemo(() => {
     if (temperature.farenheit > 85) {
       return 'hot';
@@ -27,12 +25,11 @@ export default function Main({ time, weather, temperature, clothingItems, create
     <main className='main'>
       <WeatherCard time={time} weather={weather} temperature={temperature} />
       <p className='main__forecast'>Today is {
-        isTempUnitC
+        currentTemperatureUnit === 'celsius'
           ? `${temperature.celsius}° C`
           : `${temperature.farenheit}° F`
       } / You may want to wear:</p>
       {createCards(filteredClothingItems, 'main')}
-      {/* {createClothingCards(filteredClothingItems, onCardSelection)} */}
     </main>
   )
 }

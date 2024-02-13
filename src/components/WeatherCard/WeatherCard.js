@@ -3,11 +3,11 @@ import { CurrentTemperatureUnitContext } from "../../contexts/CurrentTemperature
 import './WeatherCard.css';
 
 export default function WeatherCard({ time, weather, temperature }) {
-  const { isTempUnitC } = useContext(CurrentTemperatureUnitContext);
+  const { currentTemperatureUnit } = useContext(CurrentTemperatureUnitContext);
   return (
     <div className={`weather-card ${time}_${weather}`} >
       <p className='weather-card-temperature'>{
-        isTempUnitC ?
+        currentTemperatureUnit === 'celsius' ?
           `${temperature.celsius}° C` :
           `${temperature.farenheit}° F`
       }</p>
