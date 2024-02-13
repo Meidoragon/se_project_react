@@ -1,12 +1,21 @@
 import './ItemModal.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import Modal from '../Modal/Modal.js';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 export default function ItemModal({ item, isLoading, onClose, onDelete, onOverlayClick, isHorizontal = false }) {
-  const [deleteIsActive, setButtonState] = useState('true');
+  const { user: currentUser } = useContext(CurrentUserContext);
+  const isOwned = item.owner === currentUser._id;
+  const [deleteIsActive, setButtonState] = useState(true);
+
   useEffect(() => {
     setButtonState(!isLoading);
   }, [isLoading])
+
+  let deleteButtonClassName = ['item-modal__delete-button button',
+    !deleteIsActive ? ' delete-inactive' : '',
+    !isOwned ? ' button-hidden' : ''
+  ].join();
 
   const verticalLayout = (
     <Modal modalType='item' onOverlayClick={onOverlayClick} onClose={onClose}>
@@ -19,7 +28,7 @@ export default function ItemModal({ item, isLoading, onClose, onDelete, onOverla
         <button
           type='button'
           onClick={deleteIsActive ? onDelete : () => { }}
-          className={`item-modal__delete-button button${!deleteIsActive ? ' delete-inactive' : ''}`}>
+          className={deleteButtonClassName}>
           {isLoading ?
             'Deleting...' :
             'Delete Card'}
@@ -39,7 +48,7 @@ export default function ItemModal({ item, isLoading, onClose, onDelete, onOverla
         <button
           type='button'
           onClick={deleteIsActive ? onDelete : () => { }}
-          className={`item-modal__delete-button button${!deleteIsActive ? ' delete-inactive' : ''}`}>
+          className={deleteButtonClassName}>
           {isLoading ?
             'Deleting...' :
             'Delete Card'}

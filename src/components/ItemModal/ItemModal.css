@@ -1,9 +1,9 @@
-.item-modal__content{
+.item-modal__content {
   /*cut off the top corners of the image to match the border-radius*/
-  overflow: hidden; 
+  overflow: hidden;
 }
 
-.item-modal__content_is-horizontal{
+.item-modal__content_is-horizontal {
   display: flex;
   flex-direction: row;
   gap: 28px;
@@ -12,18 +12,18 @@
   /* max-height: 368px; */
 }
 
-.item-modal__close-button{
+.item-modal__close-button {
   position: absolute;
   top: 20px;
   right: 24px;
   z-index: 1;
 }
 
-.close-button_is-horizontal{
+.close-button_is-horizontal {
   right: 20px;
 }
 
-.item-modal__horizontal-image-container{
+.item-modal__horizontal-image-container {
   position: relative;
   overflow: hidden;
   border-radius: 20px;
@@ -33,7 +33,7 @@
   max-height: 326px;
 }
 
-.item-modal__image{
+.item-modal__image {
   /*fit image to exact width of popup, disregarding padding*/
   width: calc(100% + 56px);
   margin: -28px 0 0 -28px;
@@ -41,28 +41,28 @@
   max-height: 100%;
 }
 
-.image_is-horizontal{
+.image_is-horizontal {
   width: 100%;
   margin: 0;
 }
 
-.item-modal__container{
+.item-modal__container {
   display: flex;
   justify-content: space-between;
 }
 
-.item-modal__horizontal-text-container{
+.item-modal__horizontal-text-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.item-modal__text{
+.item-modal__text {
   padding: 0;
   margin: 12px 0 0;
 }
 
-.item-modal__delete-button{
+.item-modal__delete-button {
   margin: 12px 0 0;
   border: none;
   background-color: #FFFFFF00;
@@ -70,11 +70,15 @@
   max-height: 24px;
 }
 
-.item-modal__delete-button:hover:not(.delete-inactive){
+.item-modal__delete-button:hover:not(.delete-inactive) {
   cursor: pointer;
 }
 
-.text_image-overlay{
+.button-hidden {
+  visibility: hidden;
+}
+
+.text_image-overlay {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);

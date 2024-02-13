@@ -30,8 +30,6 @@ import {
 
 export default function App() {
   const defaultUserName = `The "Zero Degree Longitude Club" President`;
-  //const [userName, setUsername] = useState(`The "Zero Degree Longitude Club" President`); 
-  //const [avatar, setAvatar] = useState('./url/to/image.bmp');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userToken, setUserToken] = useState('');
   const [user, setUser] = useState({});
@@ -61,17 +59,25 @@ export default function App() {
     closePopup()
   }
 
-  function callSignIn(values) {
-    signIn(values)
+  function setUserInfoFromToken(token) {
+    getCurrentUser(token)
       .then((res) => {
-        console.log(res);
-        localStorage.setItem('jwt', res.token);
-        setIsLoggedIn('true');
+        setUser(res.data);
+        setUserToken(token);
+        setIsLoggedIn(true);
       })
-
+      .catch(handleApiError);
   }
 
-  function handleRegistration(values) {
+  function logIn(loginInfo) {
+    signIn(loginInfo)
+      .then((res) => {
+        localStorage.setItem('jwt', res.token);
+        setUserInfoFromToken(res.token);
+      })
+  }
+
+  function handleRegistrationFormSubmit(values) {
     setIsLoading(true);
     register(values)
       .then((res) => {
@@ -80,8 +86,7 @@ export default function App() {
           email: values.email,
           password: values.password,
         }
-        callSignIn(loginInfo)
-        // .catch(handleApiError)
+        logIn(loginInfo)
       })
       .catch(handleApiError)
       .finally(() => {
@@ -89,13 +94,11 @@ export default function App() {
       })
   }
 
-  function handleSignInSubmission(values) {
+  function handleSignInFormSubmit(values) {
     setIsLoading(true);
-    callSignIn(values)
-      .catch(handleApiError)
-      .finally(() => {
-        setIsLoading(false);
-      })
+    logIn(values);
+    closePopup();
+    setIsLoading(false);
   }
 
   function openCardPopup(item) {
@@ -112,13 +115,9 @@ export default function App() {
     setCurrentTempUnit(!isTempUnitC);
   }
 
-  function handleLogIn() {
-    setIsLoggedIn(true);
-  }
-
   function addItem(item) {
     setIsLoading(true);
-    return addItemToDB(item).then((response) => {
+    return addItemToDB(item, userToken).then((response) => {
       closePopup();
       setClothingItems([response, ...clothingItems]);
     }).catch(handleApiError).finally(() => {
@@ -190,13 +189,7 @@ export default function App() {
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
-      getCurrentUser(token)
-        .then((user) => {
-          setUser(user.data);
-          setUserToken(token);
-          handleLogIn();
-        })
-        .catch(handleApiError);
+      setUserInfoFromToken(token);
     }
   }, [])
 
@@ -214,14 +207,15 @@ export default function App() {
     };
   }, [activeModal])
 
+  // useEffect(() => {
+  //   console.log(userContext);
+  // }, [userContext, userContext.isLoggedIn, userContext.userToken])
 
   return (
     <CurrentUserContext.Provider value={{
       isLoggedIn: isLoggedIn,
       user: user,
       userToken: userToken,
-      updateUser: setUser,
-      updateIsLoggedIn: handleLogIn,
     }}>
       <CurrentTempUnitContext.Provider value={{
         isTempUnitC: isTempUnitC,
@@ -275,7 +269,7 @@ export default function App() {
             <RegisterModal
               onClose={closePopup}
               onOverlayClick={handleOverlay}
-              onSubmit={handleRegistration}
+              onSubmit={handleRegistrationFormSubmit}
               setActiveModal={setActiveModal}
               isLoading={isLoading}
             />
@@ -284,7 +278,7 @@ export default function App() {
             <LoginModal
               onClose={closePopup}
               onOverlayClick={handleOverlay}
-              onSubmit={handleSignInSubmission}
+              onSubmit={handleSignInFormSubmit}
               setActiveModal={setActiveModal}
               isLoading={isLoading}
             />

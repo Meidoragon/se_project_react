@@ -14,3 +14,4 @@ export default function Profile({ clothingItems, userName, avatar, openNewGarmen
     </div>
   )
 }
+
