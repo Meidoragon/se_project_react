@@ -1,7 +1,7 @@
 import './Sidebar.css';
 import Avatar from '../Avatar/Avatar';
 
-export default function Sidebar({ user, openProfileForm, handleLogout }) {
+export default function SideBar({ user, openProfileForm, handleLogout }) {
   return (
     <div className='sidebar'>
       <div className='sidebar__user-info'>
