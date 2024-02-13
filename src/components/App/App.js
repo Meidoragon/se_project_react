@@ -343,7 +343,7 @@ export default function App() {
             />
           }
         </div>
-      </CurrentTempUnitContext.Provider>
+      </CurrentTemperatureUnitContext.Provider>
     </CurrentUserContext.Provider>
   );
 }

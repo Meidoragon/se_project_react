@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
-import { CurrentTempUnitContext } from "../../contexts/CurrentTemperatureUnitContext";
+import { CurrentTemperatureUnitContext } from "../../contexts/CurrentTemperatureUnitContext";
 import "./ToggleSwitch.css";
 
 export default function ToggleSwitch() {
-  const { isTempUnitC, handleTempUnitSwitch } = useContext(CurrentTempUnitContext)
+  const { isTempUnitC, handleTempUnitSwitch } = useContext(CurrentTemperatureUnitContext)
 
   return (
     <label className="switch">

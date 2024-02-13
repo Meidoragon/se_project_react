@@ -1,12 +1,12 @@
 // import React from 'react';
 import { useMemo, useContext } from 'react';
 import WeatherCard from '../WeatherCard/WeatherCard.js';
-import { CurrentTempUnitContext } from '../../contexts/CurrentTemperatureUnitContext.js';
+import { CurrentTemperatureUnitContext } from '../../contexts/CurrentTemperatureUnitContext.js';
 // import { CurrentUserContext } from '../../contexts/CurrentUserContext.js';
 import './Main.css';
 
 export default function Main({ time, weather, temperature, clothingItems, createCards }) {
-  const { isTempUnitC } = useContext(CurrentTempUnitContext);
+  const { isTempUnitC } = useContext(CurrentTemperatureUnitContext);
   // const { user: currentUser } = useContext(CurrentUserContext);
   const weatherType = useMemo(() => {
     if (temperature.farenheit > 85) {
