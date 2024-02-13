@@ -2,7 +2,7 @@ import { useForm } from '../../hooks/useForm.js'
 import ModalWithForm from '../ModalWithForm/ModalWithForm.js';
 // TODO: set profile modal submit button to be inactive until at least one of the fields is valid and none are invalid
 export default function EditProfileModal({ isLoading, onSubmit, onOverlayClick, onClose }) {
-  const { values, handleChange } = useForm({ 'name': '', 'link': '' });
+  const { values, handleChange } = useForm({ 'name': '', 'avatar': '' });
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -38,8 +38,8 @@ export default function EditProfileModal({ isLoading, onSubmit, onOverlayClick, 
           className="form-modal__input"
           type='url'
           id='formInputLink'
-          name='link'
-          value={values.link}
+          name='avatar'
+          value={values.avatar}
           minLength='1'
           placeholder='Avatar URL'
           onChange={handleChange}

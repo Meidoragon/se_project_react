@@ -13,7 +13,7 @@ import { callWeatherAPI, parseResponse, parseWeatherCode } from '../../utils/Wea
 import { CurrentTemperatureUnitContext } from '../../contexts/CurrentTemperatureUnitContext';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import AddItemModal from '../AddItemModal/AddItemModal.js'
-import ItemCard from '../ItemCard/ItemCard.js';
+// import ItemCard from '../ItemCard/ItemCard.js';
 import RegisterModal from '../RegisterModal/RegisterModal';
 import LoginModal from '../LoginModal/LoginModal';
 import EditProfileModal from '../EditProfileModal/EditProfileModal';
