@@ -22,13 +22,15 @@ import {
   handleApiError,
   addItem as addItemToDB,
   deleteItem as deleteItemFromDB,
-  register,
-  signIn,
   getCurrentUser,
   updateCurrentUser,
   addCardLike,
   removeCardLike,
 } from '../../utils/api.js';
+import {
+  signIn as makeSignInRequest,
+  register,
+} from '../../utils/auth.js';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -77,11 +79,14 @@ export default function App() {
     setUser({});
   }
 
-  function logIn(loginInfo) {
-    signIn(loginInfo)
+  function signIn(loginInfo) {
+    makeSignInRequest(loginInfo)
       .then((res) => {
         localStorage.setItem('jwt', res.token);
         setUserInfoFromToken(res.token);
+      })
+      .catch((err) => {
+        handleApiError(err);
       })
   }
 
@@ -93,7 +98,7 @@ export default function App() {
           email: values.email,
           password: values.password,
         }
-        logIn(loginInfo)
+        signIn(loginInfo)
       })
       .catch(handleApiError)
       .finally(() => {
@@ -104,13 +109,14 @@ export default function App() {
 
   function handleSignInFormSubmit(values) {
     setIsLoading(true);
-    logIn(values);
+    signIn(values);
     closePopup();
     setIsLoading(false);
   }
 
   function handleProfileUpdate(values) {
     setIsLoading(true);
+    // allow for partial profile changes
     const profileInfo = {};
     for (const key of Object.keys(values)) {
       if (values[key]) {
@@ -133,10 +139,16 @@ export default function App() {
       removeCardLike(userToken, card._id)
         .then((res) => {
           return res;
+        })
+        .catch((err) => {
+          handleApiError(err);
         }) :
       addCardLike(userToken, card._id)
         .then((res) => {
           return res;
+        })
+        .catch((err) => {
+          handleApiError(err);
         })
   }
 
@@ -223,8 +235,8 @@ export default function App() {
       setLocation(data.location)
       setIsDay(data.dateTime >= data.sunrise && data.dateTime <= data.sunset ? true : false)
 
-    }).catch((response) => {
-      console.error(`Error: ${response.status}`);
+    }).catch((err) => {
+      handleApiError(err);
     })
   }, []);
 
