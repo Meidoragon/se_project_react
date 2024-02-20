@@ -4,7 +4,7 @@ function checkResponse(response) {
   if (response.ok) {
     return response.json();
   } else {
-    return Promise.reject(`Error: ${response.status}`);
+    return Promise.reject(response);
   }
 }
 
@@ -78,6 +78,7 @@ export function removeCardLike(token, id) {
   })
 }
 
-export function handleApiError(res) {
-  console.error(`Error: ${res.status}`);
+export function handleApiError(err) {
+  console.log(err)
+  console.error(`Error: ${err.status} ${err.statusText}`);
 }

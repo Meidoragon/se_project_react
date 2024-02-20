@@ -55,6 +55,7 @@
 }
 
 .item-card__image {
-  height: auto;
-  width: 100%;
+  object-fit: cover;
+  width: 328px;
+  height: 328px;
 }

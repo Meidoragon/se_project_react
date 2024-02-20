@@ -9,11 +9,10 @@ import Profile from '../Profile/Profile.js';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { convertKelvinToCelsius, convertKelvinToFarenheit, defaultAPIInfo } from '../../utils/constants';
 import ItemModal from '../ItemModal/ItemModal.js';
-import { callWeatherAPI, parseResponse, parseWeatherCode } from '../../utils/WeatherAPI.js';
+import { callWeatherAPI, parseWeatherCode } from '../../utils/WeatherAPI.js';
 import { CurrentTemperatureUnitContext } from '../../contexts/CurrentTemperatureUnitContext';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import AddItemModal from '../AddItemModal/AddItemModal.js'
-// import ItemCard from '../ItemCard/ItemCard.js';
 import RegisterModal from '../RegisterModal/RegisterModal';
 import LoginModal from '../LoginModal/LoginModal';
 import EditProfileModal from '../EditProfileModal/EditProfileModal';
@@ -37,7 +36,7 @@ export default function App() {
   const [userToken, setUserToken] = useState('');
   const [user, setUser] = useState({});
   const [isDay, setIsDay] = useState(true);
-  const [activeModal, setActiveModal] = useState();
+  const [activeModal, setActiveModal] = useState('');
   const [selectedCard, setSelectedCard] = useState({});
   const [temperature, setTemperature] = useState({
     kelvin: 0,
@@ -46,7 +45,6 @@ export default function App() {
   });
   const [weather, setWeather] = useState('clear');
   const [location, setLocation] = useState('');
-  // const [isTempUnitC, setCurrentTempUnit] = useState(false);
   const [currentTemperatureUnit, setCurrentTemperatureUnit] = useState('celsius')
   const [clothingItems, setClothingItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -63,13 +61,12 @@ export default function App() {
   }
 
   function setUserInfoFromToken(token) {
-    getCurrentUser(token)
+    return getCurrentUser(token)
       .then((res) => {
         setUser(res.data);
         setUserToken(token);
         setIsLoggedIn(true);
       })
-      .catch(handleApiError);
   }
 
   function handleLogout() {
@@ -79,77 +76,79 @@ export default function App() {
     setUser({});
   }
 
-  function signIn(loginInfo) {
-    makeSignInRequest(loginInfo)
-      .then((res) => {
-        localStorage.setItem('jwt', res.token);
-        setUserInfoFromToken(res.token);
+  const handleSubmit = (request) => {
+    setIsLoading(true);
+    request()
+      .then((response) => {
+        closePopup();
+        return response;
       })
       .catch((err) => {
         handleApiError(err);
       })
+      .finally(() => setIsLoading(false))
+  }
+
+  function signIn(loginInfo) {
+    return makeSignInRequest(loginInfo)
+      .then((res) => {
+        localStorage.setItem('jwt', res.token);
+        return setUserInfoFromToken(res.token)
+      })
   }
 
   function handleRegistrationFormSubmit(values) {
-    setIsLoading(true);
-    register(values)
-      .then((res) => {
-        const loginInfo = {
-          email: values.email,
-          password: values.password,
-        }
-        signIn(loginInfo)
-      })
-      .catch(handleApiError)
-      .finally(() => {
-        closePopup();
-        setIsLoading(false);
-      })
+    const makeRequest = () => {
+      return register(values)
+        .then(() => {
+          const loginInfo = {
+            email: values.email,
+            password: values.password,
+          }
+          return signIn(loginInfo);
+        })
+    }
+    handleSubmit(makeRequest);
   }
 
-  function handleSignInFormSubmit(values) {
-    setIsLoading(true);
-    signIn(values);
-    closePopup();
-    setIsLoading(false);
+  function handleSignInFormSubmit(loginInfo) {
+    const makeRequest = () => {
+      return signIn(loginInfo)
+    }
+    handleSubmit(makeRequest)
   }
 
   function handleProfileUpdate(values) {
-    setIsLoading(true);
-    // allow for partial profile changes
     const profileInfo = {};
     for (const key of Object.keys(values)) {
       if (values[key]) {
         profileInfo[key] = values[key];
       }
     }
-    updateCurrentUser(userToken, profileInfo)
-      .then((res) => {
-        setUser(res.data);
-      })
-      .catch((err) => {
-        handleApiError(err);
-      })
-    closePopup();
-    setIsLoading(false);
+    const makeRequest = () => {
+      return updateCurrentUser(userToken, profileInfo)
+        .then((res) => setUser(res.data))
+    }
+    handleSubmit(makeRequest)
   }
 
   function toggleLikeStatus(card, isLiked) {
-    isLiked ?
-      removeCardLike(userToken, card._id)
-        .then((res) => {
-          return res;
-        })
-        .catch((err) => {
-          handleApiError(err);
-        }) :
-      addCardLike(userToken, card._id)
-        .then((res) => {
-          return res;
-        })
-        .catch((err) => {
-          handleApiError(err);
-        })
+    const makeRequest = isLiked ?
+      removeCardLike :
+      addCardLike;
+    return makeRequest(userToken, card._id)
+      .then((updatedCard) => {
+        setClothingItems([...clothingItems.filter((v) => v._id !== updatedCard._id, updatedCard)])
+        setClothingItems(clothingItems.map((c) => {
+          return c._id === updatedCard._id ? updatedCard : c;
+        }))
+        return updatedCard
+      })
+      .catch((err) => {
+        handleApiError(err);
+        // Return original card back to calling function
+        return card;
+      })
   }
 
   function openCardPopup(item) {
@@ -162,9 +161,6 @@ export default function App() {
     setSelectedCard({});
   }
 
-  // function handleTempUnitSwitch() {
-  //   setCurrentTempUnit(!isTempUnitC);
-  // }
   function handleToggleSwitchChange() {
     if (currentTemperatureUnit === 'celsius') {
       setCurrentTemperatureUnit('farenheit')
@@ -174,13 +170,13 @@ export default function App() {
   }
 
   function addItem(item) {
-    setIsLoading(true);
-    return addItemToDB(userToken, item).then((response) => {
-      closePopup();
-      setClothingItems([response.data, ...clothingItems]);
-    }).catch(handleApiError).finally(() => {
-      setIsLoading(false);
-    })
+    const makeRequest = () => {
+      return addItemToDB(userToken, item)
+        .then((response) => {
+          setClothingItems([response.data, ...clothingItems]);
+        })
+    }
+    handleSubmit(makeRequest);
   }
 
   function openLogInForm() {
@@ -196,62 +192,53 @@ export default function App() {
   }
 
   function deleteItem() {
-    setIsLoading(true)
-    deleteItemFromDB(userToken, selectedCard._id).then(() => {
-      setClothingItems(clothingItems.filter((item) => item._id !== selectedCard._id))
-      closePopup();
-    }).catch(handleApiError).finally(() => {
-      setIsLoading(false);
-    });
+    const makeRequest = () => {
+      return deleteItemFromDB(userToken, selectedCard._id)
+        .then(() => {
+          setClothingItems(clothingItems.filter((item) => item._id !== selectedCard._id))
+        })
+    }
+    handleSubmit(makeRequest);
   }
-
-  // function createClothingCards(itemList, parentComponentName) {
-  //   return (
-  //     <ul className={`${parentComponentName}__clothing-cards`}>
-  //       {itemList.map(card => {
-  //         return (
-  //           <li key={card._id} className={`${parentComponentName}__clothing-card`}>
-  //             <ItemCard card={card} onCardSelection={openCardPopup} toggleLikeStatus={toggleLikeStatus} />
-  //           </li>)
-  //       })}
-  //     </ul>
-  //   )
-  // }
 
   // get clothing items 
   useEffect(() => {
-    getItems().then((response) => {
-      setClothingItems(response)
-    }).catch((err) => {
-      handleApiError(err)
-    })
+    getItems()
+      .then((res) => {
+        setClothingItems(res)
+      })
+      .catch(handleApiError)
   }, [])
 
   // get weather infomation
   useEffect(() => {
-    callWeatherAPI(defaultAPIInfo).then((item) => {
-      return parseResponse(item);
-    }).then((data) => {
-      const kelvin = data.temperature;
-      setTemperature({
-        kelvin: kelvin,
-        farenheit: convertKelvinToFarenheit(kelvin),
-        celsius: convertKelvinToCelsius(kelvin),
-      });
-      setWeather(parseWeatherCode(data.weatherCode));
-      setLocation(data.location)
-      setIsDay(data.dateTime >= data.sunrise && data.dateTime <= data.sunset ? true : false)
-
-    }).catch((err) => {
-      handleApiError(err);
-    })
+    callWeatherAPI(defaultAPIInfo)
+      .then((data) => {
+        const kelvin = data.temperature;
+        setTemperature({
+          kelvin,
+          farenheit: convertKelvinToFarenheit(kelvin),
+          celsius: convertKelvinToCelsius(kelvin),
+        });
+        setWeather(parseWeatherCode(data.weatherCode));
+        setLocation(data.location);
+        setIsDay(data.dateTime >= data.sunrise && data.dateTime <= data.sunset ? true : false)
+      }).catch(handleApiError)
   }, []);
 
   // get user information for logged in user
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
-      setUserInfoFromToken(token);
+      setUserInfoFromToken(token)
+        .catch((err) => {
+          if (err.status === 401) {
+            console.log('expired token')
+            handleLogout();
+          } else {
+            handleApiError(err);
+          }
+        });
     }
   }, [])
 

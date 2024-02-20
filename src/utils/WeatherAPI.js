@@ -1,6 +1,7 @@
 
 import { weatherKey } from "./api_keys.js";
 import { weatherCodeLookupTable as weatherCodes } from "./constants.js";
+import { request } from "./api.js";
 
 function getWeatherApiUrl(latitude, longitude) {
   return `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${weatherKey}`
@@ -8,14 +9,8 @@ function getWeatherApiUrl(latitude, longitude) {
 
 export function callWeatherAPI({ latitude = 51.48, longitude = 0 }) {
   const URL = getWeatherApiUrl(latitude, longitude);
-  const weatherAPI = fetch(URL).then((response) => {
-    if (response.ok) {
-      return response.json();
-    } else {
-      return Promise.reject(`Error: ${response.status}`)
-    }
-  });
-  return weatherAPI
+  return request(URL, {})
+    .then(parseResponse);
 }
 
 export function parseResponse(item) {
