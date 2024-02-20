@@ -12,7 +12,7 @@ export default function ItemModal({ item, isLoading, onClose, onDelete, onOverla
     setButtonState(!isLoading);
   }, [isLoading])
 
-  let deleteButtonClassName = ['item-modal__delete-button button',
+  const deleteButtonClassName = ['item-modal__delete-button button',
     !deleteIsActive ? ' delete-inactive' : '',
     !isOwned ? ' button-hidden' : ''
   ].join('');
