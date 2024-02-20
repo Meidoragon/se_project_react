@@ -67,6 +67,7 @@ export default function App() {
         setUserToken(token);
         setIsLoggedIn(true);
       })
+    // errors handled by calling functions
   }
 
   function handleLogout() {
@@ -93,8 +94,10 @@ export default function App() {
     return makeSignInRequest(loginInfo)
       .then((res) => {
         localStorage.setItem('jwt', res.token);
-        return setUserInfoFromToken(res.token)
+        return res.token;
       })
+      .then(setUserInfoFromToken)
+      .catch(handleApiError);
   }
 
   function handleRegistrationFormSubmit(values) {
@@ -115,7 +118,7 @@ export default function App() {
     const makeRequest = () => {
       return signIn(loginInfo)
     }
-    handleSubmit(makeRequest)
+    handleSubmit(makeRequest);
   }
 
   function handleProfileUpdate(values) {
@@ -129,7 +132,7 @@ export default function App() {
       return updateCurrentUser(userToken, profileInfo)
         .then((res) => setUser(res.data))
     }
-    handleSubmit(makeRequest)
+    handleSubmit(makeRequest);
   }
 
   function toggleLikeStatus(card, isLiked) {
@@ -223,7 +226,8 @@ export default function App() {
         setWeather(parseWeatherCode(data.weatherCode));
         setLocation(data.location);
         setIsDay(data.dateTime >= data.sunrise && data.dateTime <= data.sunset ? true : false)
-      }).catch(handleApiError)
+      })
+      .catch(handleApiError);
   }, []);
 
   // get user information for logged in user
