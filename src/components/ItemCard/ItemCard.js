@@ -11,15 +11,12 @@ export default function ItemCard({ card, onCardSelection, toggleLikeStatus }) {
   }
 
   const { user: currentUser, isLoggedIn } = useContext(CurrentUserContext);
-  let isLiked = checkLiked(card);
+  const isLiked = checkLiked(card);
   const likeButtonURL = isLiked ? likeButtonActive : likeButton;
 
 
   const handleLikeClick = () => {
     toggleLikeStatus(card, isLiked)
-      .then((newCard) => {
-        isLiked = checkLiked(newCard);
-      })
   }
 
   return (
