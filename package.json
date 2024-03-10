@@ -18,8 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "npm run build && scp -r ./build/* sheddencj@meidoragon.csproject.org:/home/sheddencj/frontend",
     "dev": "BROWSER='/opt/firefox/firefox' react-scripts start"
   },
   "eslintConfig": {
