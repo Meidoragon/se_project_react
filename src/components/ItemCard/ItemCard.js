@@ -1,5 +1,5 @@
 import React from 'react';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import './ItemCard.css';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import likeButton from '../../images/heart.svg';
