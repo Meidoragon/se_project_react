@@ -36,7 +36,9 @@ export const defaultClothingItems = [{
 }
 ]
 
-export const apiBaseUrl = 'http://localhost:3001';
+export const apiBaseUrl = process.env.NODE_ENV === 'production'
+  ? 'https://api.meidoragon.csproject.org'
+  : 'http://localhost:3001';
 
 //let's stretch the definition of constant a bit, shall we?
 export const convertKelvinToCelsius = function(temperature) {
