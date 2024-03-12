@@ -34,7 +34,7 @@ export default function ItemCard({ card, onCardSelection, toggleLikeStatus }) {
           <></>
         }
       </div>
-      <img src={card.link} className='item-card__image' alt={card.name} onClick={() => onCardSelection(card)} />
+      <img src={card.imageUrl} className='item-card__image' alt={card.name} onClick={() => onCardSelection(card)} />
     </div >
   )
 }

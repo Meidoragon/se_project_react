@@ -4,7 +4,7 @@ import ModalWithForm from '../ModalWithForm/ModalWithForm.js';
 import { radioOptions } from '../../utils/constants.js';
 
 export default function AddItemModal({ isLoading, onSubmit, onOverlayClick, onClose }) {
-  const { values, handleChange } = useForm({ 'name': '', 'link': '', 'weather': 'hot' });
+  const { values, handleChange } = useForm({ 'name': '', 'imageUrl': '', 'weather': 'hot' });
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -40,8 +40,8 @@ export default function AddItemModal({ isLoading, onSubmit, onOverlayClick, onCl
           className="form-modal__input"
           type='url'
           id='formInputLink'
-          name='link'
-          value={values.link}
+          name='imageUrl'
+          value={values.imageUrl}
           minLength='1'
           placeholder='Image URL'
           onChange={handleChange}

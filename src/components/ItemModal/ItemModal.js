@@ -19,7 +19,7 @@ export default function ItemModal({ item, isLoading, onClose, onDelete, onOverla
 
   const verticalLayout = (
     <Modal modalType='item' onOverlayClick={onOverlayClick} onClose={onClose}>
-      <img className='item-modal__image' src={item.link} alt={item.name}></img>
+      <img className='item-modal__image' src={item.imageUrl} alt={item.name}></img>
       <div className='item-modal__container'>
         <div>
           <p className='item-modal__text'>{item.name}</p>
@@ -40,7 +40,7 @@ export default function ItemModal({ item, isLoading, onClose, onDelete, onOverla
   const horizontalLayout = (
     <Modal modalType='item' onOverlayClick={onOverlayClick} modifier='is-horizontal' onClose={onClose}>
       <div className='item-modal__horizontal-image-container'>
-        <img className='item-modal__image image_is-horizontal' src={item.link} alt={item.name} />
+        <img className='item-modal__image image_is-horizontal' src={item.imageUrl} alt={item.name} />
         <p className='item-modal__text text_image-overlay'>{item.name}</p>
       </div>
       <div className='item-modal__horizontal-text-container'>
